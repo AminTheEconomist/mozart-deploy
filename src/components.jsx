@@ -89,7 +89,7 @@ export function ArcSVG({ selected, onSelect, lang, light = false, bgColor }) {
   const bg = bgColor ?? (light ? "#f3ead5" : "#080705");
   const labels = STR[lang].arcLabels;
   return (
-    <svg viewBox="0 0 1000 260" style={{ width: "100%", height: "100%" }}>
+    <svg viewBox="-10 -15 1020 290" style={{ width: "100%", height: "100%" }}>
       <defs>
         <linearGradient id="ag2" x1="0" x2="1" y1="0" y2="0">
           <stop offset="0%" stopColor="#4a6fa5" /><stop offset="40%" stopColor="#8b1e1e" />
@@ -110,21 +110,21 @@ export function ArcSVG({ selected, onSelect, lang, light = false, bgColor }) {
       <path d={path} fill="none" stroke="url(#ag2)" strokeWidth="2.2" strokeLinejoin="round" />
       {arcPoints.map((p, i) => {
         const sel = selected?.latin === p.m.latin;
-        const labelAbove = i % 2 === 0;
+        const above = i % 2 === 0;
+        const numeralY = above ? p.y - 9 : p.y + 16;
+        const titleY  = above ? p.y - 22 : p.y + 29;
         return (
           <g key={i} onClick={() => onSelect(p.m)} style={{ cursor: "pointer" }}>
-            <circle cx={p.x} cy={p.y} r={sel ? 10 : 5} fill={sel ? p.m.color : bg} stroke={p.m.color} strokeWidth="2" style={{ transition: "r .2s,fill .2s" }} />
-            {/* Always-visible Roman numeral — small, tidy, never overlaps */}
-            <text x={p.x} y={p.y - 11} textAnchor="middle" fill={sel ? p.m.color : tc}
+            {/* Tiny connector tick from circle to its label band */}
+            <line x1={p.x} y1={above ? p.y - 6 : p.y + 6} x2={p.x} y2={above ? p.y - 14 : p.y + 19}
+              stroke={p.m.color} strokeOpacity={sel ? 0.9 : 0.35} strokeWidth="1" />
+            <circle cx={p.x} cy={p.y} r={sel ? 9 : 4.5} fill={sel ? p.m.color : bg} stroke={p.m.color} strokeWidth="2" style={{ transition: "r .2s,fill .2s" }} />
+            {/* Roman numeral */}
+            <text x={p.x} y={numeralY} textAnchor="middle" fill={sel ? p.m.color : tc}
               style={{ fontFamily: "'Cinzel',serif", fontSize: 9, fontWeight: 600, letterSpacing: ".05em", pointerEvents: "none" }}>{p.m.num}</text>
-            {/* Full title appears only for the selected point, alternating above/below */}
-            {sel && (
-              <g>
-                <rect x={p.x - 50} y={labelAbove ? p.y - 32 : p.y + 14} width="100" height="18" rx="3" fill={bg} opacity="0.92" />
-                <text x={p.x} y={labelAbove ? p.y - 19 : p.y + 27} textAnchor="middle" fill={p.m.color}
-                  style={{ fontFamily: "Vazirmatn,Inter,Tahoma,sans-serif", fontSize: 11, fontWeight: 700, pointerEvents: "none" }}>{p.m[lang].title}</text>
-              </g>
-            )}
+            {/* Movement title — always visible, alternating above/below */}
+            <text x={p.x} y={titleY} textAnchor="middle" fill={sel ? p.m.color : tc}
+              style={{ fontFamily: "Vazirmatn,Inter,Tahoma,sans-serif", fontSize: 9.5, fontWeight: sel ? 700 : 500, pointerEvents: "none" }}>{p.m[lang].title}</text>
           </g>
         );
       })}
