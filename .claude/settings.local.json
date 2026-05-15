@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_in_Chrome__computer",
+      "Bash(open /Users/amin/Downloads/mozart-deploy/passenger-app/index.html)",
+      "Bash(npx --yes serve -l 5174 .)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5174)",
+      "Bash(python3 -m http.server 5174)",
+      "Read(//opt/homebrew/bin/**)",
+      "Read(//usr/local/bin/**)",
+      "Read(//Users/amin/.volta/bin/**)",
+      "Read(//Users/amin/anaconda3/bin/**)",
+      "Read(//Users/amin/**)",
+      "Bash(open -a \"TextEdit\" .env)",
+      "Bash(curl -s -o /dev/null -w \"local: %{http_code}\\\\n\" http://localhost:5174/)",
+      "Bash(curl -s -o /dev/null -w \"local: HTTP %{http_code}\\\\n\" http://localhost:5174/)",
+      "Bash(/opt/homebrew/bin/claude -p --output-format json)",
+      "Bash(curl -s http://localhost:5174/api/context)",
+      "Bash(gh auth *)",
+      "Bash(brew install *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Initial commit: Mozart Requiem presentation with 8 views \\(FA/EN\\), Latin phonetics, sheet-music view\")"
+    ]
+  }
+}

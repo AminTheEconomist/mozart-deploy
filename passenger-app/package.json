@@ -1,0 +1,13 @@
+{
+  "name": "passenger-app",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "tunnel": "cloudflared tunnel --url http://localhost:5174 --no-autoupdate",
+    "generate": "node generate-audio.js",
+    "generate:force": "node generate-audio.js --force"
+  },
+  "comment": "No npm dependencies. Analyzer uses the `claude` CLI installed globally (`npm install -g @anthropic-ai/claude-code`)."
+}
