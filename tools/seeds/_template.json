@@ -1,0 +1,39 @@
+{
+  "slug": "verdi-requiem",
+  "composer": {
+    "fa": "جوزپه وردی",
+    "en": "Giuseppe Verdi"
+  },
+  "title": {
+    "fa": "سرود روان",
+    "en": "Messa da Requiem"
+  },
+  "catalogue": "",
+  "year": 1874,
+  "key_signature": "D minor",
+  "tradition": "Catholic Mass for the Dead",
+  "primary_color": "#8b1e1e",
+  "secondary_color": "#c8982a",
+  "language": "Latin",
+  "phonetic_tradition": "Italian Ecclesiastical",
+  "composer_note_for_claude": "Verdi was a secular Italian opera composer; the Requiem is operatic and dramatic, written in memory of Manzoni in 1874. Mention the Manzoni context. Emphasize the operatic dimension vs Mozart's liturgical austerity.",
+  "audience": "Iranian-Canadian audience; secular spiritual register, not Shia-religious. Persian translations should use Avestan/pure-Persian vocabulary where possible (روان not روح, گذر not عبور).",
+  "movements": [
+    {
+      "num": "I",
+      "latin": "Requiem et Kyrie",
+      "tempo_key": "A minor → A major · Andante",
+      "mood_hint": "subdued, prayerful, building",
+      "arc": 30,
+      "authorship": "Verdi — complete"
+    },
+    {
+      "num": "II",
+      "latin": "Dies Irae",
+      "tempo_key": "G minor · Allegro agitato",
+      "mood_hint": "terrifying, operatic, the most famous Dies Irae in the repertoire",
+      "arc": 5,
+      "authorship": "Verdi — complete"
+    }
+  ]
+}

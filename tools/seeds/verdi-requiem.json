@@ -1,0 +1,38 @@
+{
+  "slug": "verdi-requiem",
+  "composer": {
+    "fa": "جوزپه وردی",
+    "en": "Giuseppe Verdi"
+  },
+  "title": {
+    "fa": "سرود روان",
+    "en": "Messa da Requiem"
+  },
+  "catalogue": "",
+  "year": 1874,
+  "key_signature": "D minor",
+  "tradition": "Catholic Mass for the Dead",
+  "primary_color": "#8b1e1e",
+  "secondary_color": "#c8982a",
+  "language": "Latin",
+  "phonetic_tradition": "Italian Ecclesiastical",
+  "composer_note_for_claude": "Verdi was a secular Italian opera composer, sometimes anti-clerical. The Requiem was written in 1874 in memory of the writer Alessandro Manzoni, not for liturgical use — Verdi called it a 'concert work for the dead.' It is operatic, dramatic, theatrical — earning Hans von Bülow's famous (and later retracted) jibe that it was 'an opera in ecclesiastical robes.' The Dies Irae returns multiple times across the work like a leitmotif. Emphasize the operatic dimension contrasted with Mozart's liturgical austerity.",
+  "audience": "Iranian-Canadian, secular spiritual register. Persian should use Avestan/pure-Persian vocabulary (روان not روح, گذر not عبور). Not Shia/religious framing.",
+  "movements": [
+    { "num": "I", "latin": "Requiem et Kyrie", "tempo_key": "A minor → A major · Andante", "mood_hint": "subdued opening, prayerful, slowly building", "arc": 35, "authorship": "Verdi — complete" },
+    { "num": "II", "latin": "Dies Irae", "tempo_key": "G minor · Allegro agitato", "mood_hint": "terrifying, operatic, the most famous setting of this text", "arc": 5, "authorship": "Verdi — complete" },
+    { "num": "III", "latin": "Tuba Mirum", "tempo_key": "A♭ major · Allegro sostenuto", "mood_hint": "antiphonal trumpets, summons", "arc": 15, "authorship": "Verdi — complete" },
+    { "num": "IV", "latin": "Liber Scriptus", "tempo_key": "D minor · Allegro molto sostenuto", "mood_hint": "mezzo-soprano solo, the book of judgement", "arc": 18, "authorship": "Verdi — complete" },
+    { "num": "V", "latin": "Quid Sum Miser", "tempo_key": "G minor · Adagio", "mood_hint": "vulnerable, three soloists", "arc": 25, "authorship": "Verdi — complete" },
+    { "num": "VI", "latin": "Rex Tremendae", "tempo_key": "C minor · Allegro maestoso", "mood_hint": "majestic, alternating awe and supplication", "arc": 30, "authorship": "Verdi — complete" },
+    { "num": "VII", "latin": "Recordare", "tempo_key": "F major · Andante", "mood_hint": "duet, intimate plea", "arc": 45, "authorship": "Verdi — complete" },
+    { "num": "VIII", "latin": "Ingemisco", "tempo_key": "E♭ major · Andante", "mood_hint": "tenor aria, contrition with lyrical hope", "arc": 50, "authorship": "Verdi — complete" },
+    { "num": "IX", "latin": "Confutatis", "tempo_key": "E minor · Andante", "mood_hint": "bass aria, judgement and plea, Dies Irae returns", "arc": 15, "authorship": "Verdi — complete" },
+    { "num": "X", "latin": "Lacrimosa", "tempo_key": "B♭ minor · Largo", "mood_hint": "the great quartet, tearful, transcendent", "arc": 55, "authorship": "Verdi — complete" },
+    { "num": "XI", "latin": "Offertorio · Domine Jesu", "tempo_key": "A♭ major · Andante mosso", "mood_hint": "four soloists, prayer for the dead", "arc": 60, "authorship": "Verdi — complete" },
+    { "num": "XII", "latin": "Sanctus", "tempo_key": "F major · Allegro", "mood_hint": "double-fugue, radiant", "arc": 75, "authorship": "Verdi — complete" },
+    { "num": "XIII", "latin": "Agnus Dei", "tempo_key": "C major · Andante", "mood_hint": "soprano and mezzo in octaves, ancient simplicity", "arc": 70, "authorship": "Verdi — complete" },
+    { "num": "XIV", "latin": "Lux Aeterna", "tempo_key": "B♭ major · Andante", "mood_hint": "three lower soloists, eternal light, ethereal", "arc": 80, "authorship": "Verdi — complete" },
+    { "num": "XV", "latin": "Libera Me", "tempo_key": "C minor → C major · Andante", "mood_hint": "soprano with chorus, Dies Irae returns one final time, a desperate then resigned plea", "arc": 65, "authorship": "Verdi — complete" }
+  ]
+}
