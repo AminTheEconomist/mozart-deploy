@@ -28,7 +28,8 @@
       "Bash(vercel --prod --yes)",
       "Bash(npm run *)",
       "Bash(npm install *)",
-      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Add Performance view \\(choir/hall/church scaffold\\); fix arc chart label crumbling \\(Roman numerals + selected-only titles\\)\")"
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Add Performance view \\(choir/hall/church scaffold\\); fix arc chart label crumbling \\(Roman numerals + selected-only titles\\)\")",
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Translate Requiem → سرود روان \\(Avestan-rooted 'Anthem of the Soul'\\); restore گور for grave contexts\")"
     ]
   }
 }
