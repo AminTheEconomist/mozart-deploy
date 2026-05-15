@@ -74,7 +74,7 @@ Output:
 
 - **Phonetics** — verify the stressed syllables (CAPITALS) match how you'd actually sing it.
 - **Arc values** — Claude can be inconsistent here; tune them so the emotional curve makes sense.
-- **Persian meanings** — check for Arabicisms or Shia-religious framing that slipped in.
+- **Persian meanings** — check for non-Persian-rooted vocabulary or doctrinal framing that slipped in.
 - **English meanings** — make sure the voice matches your scholarship.
 - **Notes** — these are 1-sentence facts; if Claude invented one, replace or remove.
 

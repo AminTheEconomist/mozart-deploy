@@ -17,7 +17,7 @@
   "language": "Latin",
   "phonetic_tradition": "Italian Ecclesiastical",
   "composer_note_for_claude": "Verdi was a secular Italian opera composer; the Requiem is operatic and dramatic, written in memory of Manzoni in 1874. Mention the Manzoni context. Emphasize the operatic dimension vs Mozart's liturgical austerity.",
-  "audience": "Iranian-Canadian audience; secular spiritual register, not Shia-religious. Persian translations should use Avestan/pure-Persian vocabulary where possible (روان not روح, گذر not عبور).",
+  "audience": "Iranian-Canadian audience; secular contemplative register. Persian translations should use Avestan/pure-Persian vocabulary where possible (روان not روح, گذر not عبور).",
   "movements": [
     {
       "num": "I",

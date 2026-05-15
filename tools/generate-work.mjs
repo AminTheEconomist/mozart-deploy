@@ -98,7 +98,7 @@ const SHARED_CONTEXT = `You are generating bilingual (Persian/English) content f
 
 CRITICAL STYLE GUIDE:
 - Phonetics use Italian Ecclesiastical Latin, CAPITALS for stressed syllables (e.g. "REH-kwee-em eh-TEHR-nahm DOH-nah").
-- Persian uses secular, Avestan-rooted vocabulary where possible (روان not روح, گذر not عبور). NOT Shia/religious register. Audience: Iranian-Canadian.
+- Persian uses secular, Avestan-rooted vocabulary where possible (روان not روح, گذر not عبور). Universal, contemplative register. Audience: Iranian-Canadian.
 - Meanings are 2-3 short paragraphs, literary, interpretive — not academic. Each paragraph separated by \\n\\n.
 - Notes (when present) are 1 sentence of striking historical or musical fact.
 - English translations of Latin follow the standard liturgical tradition (e.g. "Eternal rest grant unto them, O Lord").

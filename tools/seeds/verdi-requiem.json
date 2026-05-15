@@ -17,7 +17,7 @@
   "language": "Latin",
   "phonetic_tradition": "Italian Ecclesiastical",
   "composer_note_for_claude": "Verdi was a secular Italian opera composer, sometimes anti-clerical. The Requiem was written in 1874 in memory of the writer Alessandro Manzoni, not for liturgical use — Verdi called it a 'concert work for the dead.' It is operatic, dramatic, theatrical — earning Hans von Bülow's famous (and later retracted) jibe that it was 'an opera in ecclesiastical robes.' The Dies Irae returns multiple times across the work like a leitmotif. Emphasize the operatic dimension contrasted with Mozart's liturgical austerity.",
-  "audience": "Iranian-Canadian, secular spiritual register. Persian should use Avestan/pure-Persian vocabulary (روان not روح, گذر not عبور). Not Shia/religious framing.",
+  "audience": "Iranian-Canadian, secular contemplative register. Persian should use Avestan/pure-Persian vocabulary (روان not روح, گذر not عبور).",
   "movements": [
     { "num": "I", "latin": "Requiem et Kyrie", "tempo_key": "A minor → A major · Andante", "mood_hint": "subdued opening, prayerful, slowly building", "arc": 35, "authorship": "Verdi — complete" },
     { "num": "II", "latin": "Dies Irae", "tempo_key": "G minor · Allegro agitato", "mood_hint": "terrifying, operatic, the most famous setting of this text", "arc": 5, "authorship": "Verdi — complete" },

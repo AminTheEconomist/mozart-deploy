@@ -34,7 +34,8 @@
       "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Wire feedback widget to Claude: serverless function analyzes each submission with claude-sonnet-4-5 and returns a reply shown in the modal\")",
       "Bash(node --check tools/generate-work.mjs)",
       "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Phase 1 of multi-work pipeline: generator script + seed template + Verdi Requiem example seed + tools/README\")",
-      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Chart: bring movement titles back, alternating above/below Roman numerals with connector ticks; expand viewBox for headroom\")"
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Chart: bring movement titles back, alternating above/below Roman numerals with connector ticks; expand viewBox for headroom\")",
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Reword pipeline prompts and seed audience notes to describe register positively \\(secular, contemplative, Avestan-rooted\\) without naming specific religious traditions to avoid\")"
     ]
   }
 }
