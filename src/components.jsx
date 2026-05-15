@@ -110,11 +110,21 @@ export function ArcSVG({ selected, onSelect, lang, light = false, bgColor }) {
       <path d={path} fill="none" stroke="url(#ag2)" strokeWidth="2.2" strokeLinejoin="round" />
       {arcPoints.map((p, i) => {
         const sel = selected?.latin === p.m.latin;
+        const labelAbove = i % 2 === 0;
         return (
           <g key={i} onClick={() => onSelect(p.m)} style={{ cursor: "pointer" }}>
-            <circle cx={p.x} cy={p.y} r={sel ? 9 : 5} fill={sel ? p.m.color : bg} stroke={p.m.color} strokeWidth="2" style={{ transition: "r .2s,fill .2s" }} />
-            <text x={p.x} y={p.y - 13} textAnchor="middle" fill={sel ? p.m.color : tc}
-              style={{ fontFamily: "Vazirmatn,Inter,Tahoma,sans-serif", fontSize: 10, pointerEvents: "none" }}>{p.m[lang].title}</text>
+            <circle cx={p.x} cy={p.y} r={sel ? 10 : 5} fill={sel ? p.m.color : bg} stroke={p.m.color} strokeWidth="2" style={{ transition: "r .2s,fill .2s" }} />
+            {/* Always-visible Roman numeral — small, tidy, never overlaps */}
+            <text x={p.x} y={p.y - 11} textAnchor="middle" fill={sel ? p.m.color : tc}
+              style={{ fontFamily: "'Cinzel',serif", fontSize: 9, fontWeight: 600, letterSpacing: ".05em", pointerEvents: "none" }}>{p.m.num}</text>
+            {/* Full title appears only for the selected point, alternating above/below */}
+            {sel && (
+              <g>
+                <rect x={p.x - 50} y={labelAbove ? p.y - 32 : p.y + 14} width="100" height="18" rx="3" fill={bg} opacity="0.92" />
+                <text x={p.x} y={labelAbove ? p.y - 19 : p.y + 27} textAnchor="middle" fill={p.m.color}
+                  style={{ fontFamily: "Vazirmatn,Inter,Tahoma,sans-serif", fontSize: 11, fontWeight: 700, pointerEvents: "none" }}>{p.m[lang].title}</text>
+              </g>
+            )}
           </g>
         );
       })}

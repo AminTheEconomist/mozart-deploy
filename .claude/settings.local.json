@@ -20,7 +20,15 @@
       "Bash(brew install *)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Initial commit: Mozart Requiem presentation with 8 views \\(FA/EN\\), Latin phonetics, sheet-music view\")"
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Initial commit: Mozart Requiem presentation with 8 views \\(FA/EN\\), Latin phonetics, sheet-music view\")",
+      "Bash(npm i *)",
+      "Bash(vercel --version)",
+      "Bash(vercel whoami *)",
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Move arc y-axis labels to left margin; translate Requiem → مرثیه in Persian\")",
+      "Bash(vercel --prod --yes)",
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Add Performance view \\(choir/hall/church scaffold\\); fix arc chart label crumbling \\(Roman numerals + selected-only titles\\)\")"
     ]
   }
 }

@@ -394,3 +394,116 @@ export function ViewSheetMusic({ lang }) {
     </div>
   );
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// VIEW: Performance (Atmospheric — Choir · Hall · Church)
+// ══════════════════════════════════════════════════════════════════════════════
+// Scaffold for photo-based atmospheric view. Drop real images into /public/perf/
+// and replace `src` props in the SCENES + PERF_IMAGES arrays.
+// ══════════════════════════════════════════════════════════════════════════════
+const SCENES = [
+  { key: "choir",
+    label: { fa: "گروه کر", en: "The Choir" },
+    sub:   { fa: "صداهای انسانی، سکوت سالن", en: "Human voices, the hush of the hall" },
+    color: "#c8982a",
+    gradient: "radial-gradient(ellipse at 50% 70%,#3a2814 0%,#0a0604 70%)",
+    src: "/perf/choir.jpg" },
+  { key: "hall",
+    label: { fa: "تالار و ارکستر", en: "Hall & Orchestra" },
+    sub:   { fa: "چوب، طلا، نور شمع‌مانند", en: "Wood, gilt, candlelit light" },
+    color: "#8b1e1e",
+    gradient: "radial-gradient(ellipse at 50% 50%,#4a1e0e 0%,#0c0604 75%)",
+    src: "/perf/hall.jpg" },
+  { key: "church",
+    label: { fa: "کلیسا", en: "The Church" },
+    sub:   { fa: "سنگ، طاق‌ها، طنین جاودان", en: "Stone, vaults, eternal resonance" },
+    color: "#4a6fa5",
+    gradient: "radial-gradient(ellipse at 50% 35%,#1a2540 0%,#050810 80%)",
+    src: "/perf/church.jpg" },
+];
+
+function Scene({ scene, lang }) {
+  const [broken, setBroken] = useState(false);
+  return (
+    <div style={{ position: "relative", aspectRatio: "4/5", overflow: "hidden", borderRadius: 4, background: scene.gradient, cursor: "pointer", transition: "transform .5s" }}
+      onMouseEnter={e => e.currentTarget.style.transform = "scale(1.015)"}
+      onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>
+      {!broken && (
+        <img src={scene.src} alt="" onError={() => setBroken(true)}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "saturate(.85) contrast(1.05)" }} />
+      )}
+      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg,transparent 40%,rgba(0,0,0,.85))` }} />
+      {broken && (
+        <div style={{ position: "absolute", top: "1rem", left: "1rem", fontSize: ".62rem", color: "rgba(255,255,255,.35)", letterSpacing: ".15em", fontFamily: "'Inter',sans-serif" }}>
+          {scene.src.replace("/perf/", "")} · placeholder
+        </div>
+      )}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.5rem 1.5rem 1.75rem", direction: dirFor(lang) }}>
+        <p style={{ fontFamily: "'Cinzel',serif", fontSize: ".7rem", letterSpacing: ".3em", color: scene.color, marginBottom: ".4rem", textTransform: "uppercase" }}>{scene.key}</p>
+        <h3 style={{ ...SERIF(lang), textAlign: "inherit", fontWeight: 700, fontSize: "1.55rem", color: "#f3ead5", marginBottom: ".25rem", lineHeight: 1.2 }}>{scene.label[lang]}</h3>
+        <p style={{ ...SERIF(lang), textAlign: "inherit", fontStyle: "italic", fontSize: ".92rem", color: "rgba(255,255,255,.65)" }}>{scene.sub[lang]}</p>
+      </div>
+    </div>
+  );
+}
+
+export function ViewPerformance({ lang }) {
+  const [selected, setSelected] = useState(null);
+  const t = STR[lang];
+  return (
+    <div style={{ background: "#0a0806", minHeight: "100vh" }}>
+      {/* Atmospheric hero */}
+      <div style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "4rem 2rem", textAlign: "center", direction: dirFor(lang),
+        background: "radial-gradient(ellipse at 50% 60%,#2a1810 0%,#0a0604 70%)" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 20% 30%,rgba(212,166,74,.12),transparent 50%),radial-gradient(circle at 80% 70%,rgba(139,30,30,.1),transparent 50%)", pointerEvents: "none" }} />
+        <p style={{ ...SANS(lang), textAlign: "center", fontSize: ".8rem", letterSpacing: ".4em", color: "#c8982a", marginBottom: "2.5rem", position: "relative", textTransform: "uppercase" }}>{t.perfEyebrow}</p>
+        <h1 style={{ ...SERIF(lang), textAlign: "center", fontWeight: 700, fontSize: "clamp(2.8rem,8vw,5.8rem)", lineHeight: 1.1, color: "#f3ead5", marginBottom: "1.75rem", position: "relative", textShadow: "0 0 60px rgba(200,152,42,.25)" }}>
+          {t.perfTitle}
+        </h1>
+        <div style={{ width: 80, height: 1, background: "linear-gradient(90deg,transparent,#c8982a,transparent)", margin: "1rem auto 2.5rem", position: "relative" }} />
+        <p style={{ ...SERIF(lang), textAlign: "center", fontSize: "1.18rem", color: "rgba(243,234,213,.75)", maxWidth: 620, lineHeight: 2, position: "relative", fontStyle: "italic" }}>{t.perfBlurb}</p>
+      </div>
+
+      {/* Three scenes */}
+      <div style={{ padding: "6rem 2rem", maxWidth: 1400, margin: "0 auto", direction: dirFor(lang) }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "2rem" }}>
+          {SCENES.map(s => <Scene key={s.key} scene={s} lang={lang} />)}
+        </div>
+        <p style={{ ...SANS(lang), textAlign: "center", fontSize: ".72rem", color: "rgba(255,255,255,.3)", marginTop: "2.5rem", fontStyle: "italic" }}>{t.perfPlaceholder}</p>
+      </div>
+
+      {/* Arc */}
+      <div style={{ padding: "4rem 2rem 6rem", maxWidth: 1100, margin: "0 auto", direction: dirFor(lang) }}>
+        <p style={{ ...SANS(lang), textAlign: alignFor(lang), fontSize: ".8rem", letterSpacing: ".2em", color: "#c8982a", marginBottom: ".75rem", textTransform: "uppercase" }}>{t.arcEyebrow}</p>
+        <h2 style={{ ...SERIF(lang), textAlign: alignFor(lang), fontWeight: 700, fontSize: "clamp(1.8rem,4vw,2.8rem)", color: "#f3ead5", marginBottom: "2.5rem" }}>{t.arcTitlePre}<span style={{ color: "#8b1e1e" }}>{t.arcDark}</span>{t.arcTitlePost}</h2>
+        <div style={{ height: 280 }}><ArcSVG selected={selected} onSelect={setSelected} lang={lang} /></div>
+      </div>
+
+      {/* Movement strip with image slots */}
+      <div style={{ padding: "0 2rem 6rem", maxWidth: 1400, margin: "0 auto", direction: dirFor(lang) }}>
+        <p style={{ ...SANS(lang), textAlign: alignFor(lang), fontSize: ".75rem", letterSpacing: ".2em", color: "#c8982a", marginBottom: "1.75rem", textTransform: "uppercase" }}>{t.perfMovementsEyebrow}</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: "1.5rem" }}>
+          {movements.map(m => (
+            <div key={m.latin} onClick={() => setSelected(m)}
+              style={{ background: "#120e0a", border: "1px solid rgba(200,152,42,.15)", cursor: "pointer", transition: "all .3s", overflow: "hidden" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = m.color + "88"; e.currentTarget.style.transform = "translateY(-3px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(200,152,42,.15)"; e.currentTarget.style.transform = "translateY(0)"; }}>
+              <div style={{ aspectRatio: "16/10", background: `linear-gradient(135deg,${m.color}33,${m.color}11),radial-gradient(ellipse at 50% 70%,#2a1a0e,#0a0604)`, position: "relative", display: "flex", alignItems: "flex-end", padding: "1rem" }}>
+                <span style={{ fontFamily: "'Cinzel',serif", fontSize: ".7rem", color: m.color, letterSpacing: ".15em" }}>{m.num}</span>
+              </div>
+              <div style={{ padding: "1rem 1.1rem 1.25rem" }}>
+                <h4 style={{ ...SERIF(lang), textAlign: alignFor(lang), fontWeight: 700, fontSize: "1.05rem", color: "#f3ead5", lineHeight: 1.3, marginBottom: ".25rem" }}>{m[lang].title}</h4>
+                <p style={{ fontFamily: "'Cinzel',serif", fontStyle: "italic", fontSize: ".72rem", color: m.color, opacity: .8, direction: "ltr", textAlign: alignFor(lang) }}>{m.latin}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <footer style={{ background: "#050302", color: "rgba(243,234,213,.4)", padding: "2.5rem 2rem", textAlign: "center", borderTop: "1px solid rgba(200,152,42,.2)" }}>
+        <p style={{ ...SANS(lang), textAlign: "center", fontSize: ".75rem", color: "#c8982a" }}>{t.footer}</p>
+      </footer>
+      <Modal m={selected} lang={lang} onClose={() => setSelected(null)} />
+    </div>
+  );
+}

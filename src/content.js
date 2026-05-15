@@ -487,10 +487,15 @@ export const STR = {
     sheetIntro: "برای هر موومان، نت اصلی کر و پیانو در دسترس است. روی هر موومان کلیک کنید تا نت را ببینید. تلفظ کلیسایی لاتین در زیر هر سطر آمده — حروف بزرگ هجای تأکیدی را نشان می‌دهد.",
     sheetPlaceholder: "نت در دسترس نیست — لطفاً فایل نت را در پوشه /public بارگذاری کنید",
     phonNote: "حروف بزرگ = هجای تأکیدی · تلفظ کلیسایی (ایتالیایی)",
+    perfEyebrow: "نمای اجرا · فضای زنده",
+    perfTitle: "صدا، تالار، سنگ",
+    perfBlurb: "اثر در سه فضا زنده می‌شود — گروه کر، تالار ارکستر، و کلیسا. هر یک سهم خود را در رنگ صدا، طنین و معنا دارد.",
+    perfMovementsEyebrow: "پانزده موومان — نمای صحنه",
+    perfPlaceholder: "تصاویر هنوز افزوده نشده — فایل‌ها را در /public/perf/ بارگذاری کنید (choir.jpg · hall.jpg · church.jpg)",
     viewLabels: {
       interactive: "تعاملی", poetic: "شعری", museum: "موزه‌ای",
       dramatic: "سینمایی", minimal: "ساده", editorial: "مجله‌ای",
-      illuminated: "معنوی", sheet: "نت‌ها",
+      illuminated: "معنوی", performance: "اجرا", sheet: "نت‌ها",
     },
   },
   en: {
@@ -559,10 +564,15 @@ export const STR = {
     sheetIntro: "For each movement, the original choir and piano score is available. Click any movement to view the sheet music. Ecclesiastical Latin pronunciation appears beneath each line — capital letters indicate the stressed syllable.",
     sheetPlaceholder: "Score not available — please upload the sheet music file to /public",
     phonNote: "CAPITALS = stressed syllable · Ecclesiastical (Italianate) pronunciation",
+    perfEyebrow: "Performance View · Living Space",
+    perfTitle: "Voice, Hall, Stone",
+    perfBlurb: "The work comes alive in three spaces — the choir, the orchestra hall, and the church. Each contributes its colour of sound, its resonance, its meaning.",
+    perfMovementsEyebrow: "Fifteen Movements — Scene View",
+    perfPlaceholder: "Photos not yet added — upload files to /public/perf/ (choir.jpg · hall.jpg · church.jpg)",
     viewLabels: {
       interactive: "Interactive", poetic: "Poetic", museum: "Museum",
       dramatic: "Cinematic", minimal: "Minimal", editorial: "Editorial",
-      illuminated: "Spiritual", sheet: "Score",
+      illuminated: "Spiritual", performance: "Performance", sheet: "Score",
     },
   },
 };
