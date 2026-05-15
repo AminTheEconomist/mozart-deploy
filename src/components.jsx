@@ -103,8 +103,8 @@ export function ArcSVG({ selected, onSelect, lang, light = false, bgColor }) {
       {[[labels.peace, 25], [labels.sorrow, 120], [labels.dread, 215]].map(([l, y]) => {
         // Persian RTL: reading lands on right-edge of label (closest to chart), feels cramped.
         // Pull Persian labels further left for the same visual breathing room English has.
-        const labelX = lang === "fa" ? 38 : 52;
-        const lineStart = lang === "fa" ? 70 : 60;
+        const labelX = lang === "fa" ? 25 : 52;
+        const lineStart = lang === "fa" ? 90 : 60;
         return (
           <g key={l}>
             <line x1={lineStart} x2="930" y1={y} y2={y} stroke="rgba(128,100,60,0.18)" strokeDasharray="3,4" />
