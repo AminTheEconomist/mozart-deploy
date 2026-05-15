@@ -102,8 +102,8 @@ export function ArcSVG({ selected, onSelect, lang, light = false, bgColor }) {
       </defs>
       {[[labels.peace, 25], [labels.sorrow, 120], [labels.dread, 215]].map(([l, y]) => (
         <g key={l}>
-          <line x1="50" x2="940" y1={y} y2={y} stroke="rgba(128,100,60,0.18)" strokeDasharray="3,4" />
-          <text x="956" y={y + 4} textAnchor="start" fill={tc} style={{ fontFamily: "Vazirmatn,Inter,Tahoma,sans-serif", fontSize: 11 }}>{l}</text>
+          <line x1="60" x2="930" y1={y} y2={y} stroke="rgba(128,100,60,0.18)" strokeDasharray="3,4" />
+          <text x="52" y={y + 4} textAnchor="end" fill={tc} style={{ fontFamily: "Vazirmatn,Inter,Tahoma,sans-serif", fontSize: 11 }}>{l}</text>
         </g>
       ))}
       <path d={`${path} L ${arcPoints[arcPoints.length - 1].x} 240 L ${arcPoints[0].x} 240 Z`} fill="url(#fg2)" />
