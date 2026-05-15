@@ -2,6 +2,7 @@ import { useState } from "react";
 import { STR } from "./content.js";
 import { ViewInteractive, ViewPoetic, ViewMuseum } from "./views-classic.jsx";
 import { ViewCinematic, ViewMinimal, ViewEditorial, ViewIlluminated, ViewSheetMusic, ViewPerformance } from "./views-new.jsx";
+import { FeedbackWidget } from "./FeedbackWidget.jsx";
 
 const VIEWS = {
   interactive: ViewInteractive,
@@ -64,6 +65,8 @@ export default function App() {
       </div>
 
       <ViewComponent lang={lang} />
+
+      <FeedbackWidget lang={lang} view={view} selected={null} />
     </>
   );
 }
