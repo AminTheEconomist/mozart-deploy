@@ -100,12 +100,18 @@ export function ArcSVG({ selected, onSelect, lang, light = false, bgColor }) {
           <stop offset="100%" stopColor="#8b1e1e" stopOpacity="0" />
         </linearGradient>
       </defs>
-      {[[labels.peace, 25], [labels.sorrow, 120], [labels.dread, 215]].map(([l, y]) => (
-        <g key={l}>
-          <line x1="60" x2="930" y1={y} y2={y} stroke="rgba(128,100,60,0.18)" strokeDasharray="3,4" />
-          <text x="52" y={y + 4} textAnchor="end" fill={tc} style={{ fontFamily: "Vazirmatn,Inter,Tahoma,sans-serif", fontSize: 11 }}>{l}</text>
-        </g>
-      ))}
+      {[[labels.peace, 25], [labels.sorrow, 120], [labels.dread, 215]].map(([l, y]) => {
+        // Persian RTL: reading lands on right-edge of label (closest to chart), feels cramped.
+        // Pull Persian labels further left for the same visual breathing room English has.
+        const labelX = lang === "fa" ? 38 : 52;
+        const lineStart = lang === "fa" ? 70 : 60;
+        return (
+          <g key={l}>
+            <line x1={lineStart} x2="930" y1={y} y2={y} stroke="rgba(128,100,60,0.18)" strokeDasharray="3,4" />
+            <text x={labelX} y={y + 4} textAnchor="end" fill={tc} style={{ fontFamily: "Vazirmatn,Inter,Tahoma,sans-serif", fontSize: 11 }}>{l}</text>
+          </g>
+        );
+      })}
       <path d={`${path} L ${arcPoints[arcPoints.length - 1].x} 240 L ${arcPoints[0].x} 240 Z`} fill="url(#fg2)" />
       <path d={path} fill="none" stroke="url(#ag2)" strokeWidth="2.2" strokeLinejoin="round" />
       {arcPoints.map((p, i) => {
