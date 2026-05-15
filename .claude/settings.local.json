@@ -37,7 +37,9 @@
       "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Chart: bring movement titles back, alternating above/below Roman numerals with connector ticks; expand viewBox for headroom\")",
       "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Reword pipeline prompts and seed audience notes to describe register positively \\(secular, contemplative, Avestan-rooted\\) without naming specific religious traditions to avoid\")",
       "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Chart: language-aware horizontal gap between y-axis labels and chart area \\(Persian gets extra breathing room since RTL reading lands on the right-edge near the chart\\)\")",
-      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Chart: widen Persian gap further \\(label x=25, line start x=90 → 65px breathing room\\)\")"
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Chart: widen Persian gap further \\(label x=25, line start x=90 → 65px breathing room\\)\")",
+      "Bash(vercel logs *)",
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Add npm run feedback: pretty-prints all submissions from Vercel logs with timestamps, view, language, and Claude analysis \\(if API key is set\\)\")"
     ]
   }
 }
