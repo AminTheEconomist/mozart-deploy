@@ -18,6 +18,7 @@ export function FeedbackWidget({ lang, view, selected }) {
   const [text, setText] = useState("");
   const [recording, setRecording] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [reply, setReply] = useState(null);
   const recognitionRef = useRef(null);
   const t = STR[lang].feedback;
   const dir = lang === "fa" ? "rtl" : "ltr";
@@ -68,14 +69,17 @@ export function FeedbackWidget({ lang, view, selected }) {
         }),
       });
       if (!res.ok) throw new Error("bad status");
-      // Also stash locally as a backup the user can retrieve
+      const data = await res.json().catch(() => ({}));
       try {
         const log = JSON.parse(localStorage.getItem("mozart_feedback_log") || "[]");
-        log.push({ text: text.trim(), view, lang, at: new Date().toISOString() });
+        log.push({ text: text.trim(), view, lang, at: new Date().toISOString(), reply: data.reply || null });
         localStorage.setItem("mozart_feedback_log", JSON.stringify(log));
       } catch {}
+      setReply(data.reply || null);
       setStatus("sent");
-      setTimeout(() => { setOpen(false); setText(""); setStatus("idle"); }, 1800);
+      // If Claude replied, keep modal open longer so user can read it
+      const closeAfter = data.reply ? 6000 : 1800;
+      setTimeout(() => { setOpen(false); setText(""); setStatus("idle"); setReply(null); }, closeAfter);
     } catch {
       setStatus("error");
       setTimeout(() => setStatus("idle"), 2500);
@@ -195,12 +199,20 @@ export function FeedbackWidget({ lang, view, selected }) {
             <div style={{ fontSize: ".72rem", color: "rgba(255,255,255,.4)", marginBottom: "1rem", minHeight: "1rem" }}>
               {recording && <span style={{ color: "#e74c3c" }}>● {t.recording}</span>}
               {status === "sending" && <span style={{ color: "#b8893a" }}>{t.sending}</span>}
-              {status === "sent" && <span style={{ color: "#5a9d5a" }}>✓ {t.sent}</span>}
+              {status === "sent" && !reply && <span style={{ color: "#5a9d5a" }}>✓ {t.sent}</span>}
               {status === "error" && <span style={{ color: "#e74c3c" }}>{t.error}</span>}
               {status === "idle" && !recording && (
                 <span>{t.contextHint} <strong style={{ color: "rgba(184,137,58,.7)" }}>{STR[lang].viewLabels[view] || view}</strong></span>
               )}
             </div>
+
+            {/* Claude's reply, when it comes back */}
+            {status === "sent" && reply && (
+              <div style={{ background: "rgba(184,137,58,.08)", border: "1px solid rgba(184,137,58,.3)", padding: "1rem 1.1rem", marginBottom: "1rem", animation: "slideUp .3s ease" }}>
+                <div style={{ fontSize: ".62rem", letterSpacing: ".2em", color: "#b8893a", marginBottom: ".5rem", textTransform: "uppercase" }}>{t.claudeReplyLabel}</div>
+                <p style={{ fontSize: ".95rem", color: "#f3ead5", lineHeight: 1.75, textAlign: lang === "fa" ? "right" : "left" }}>{reply}</p>
+              </div>
+            )}
 
             {/* Actions */}
             <div style={{ display: "flex", gap: ".6rem", justifyContent: "space-between", alignItems: "center", flexDirection: lang === "fa" ? "row-reverse" : "row" }}>

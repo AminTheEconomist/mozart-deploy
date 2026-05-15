@@ -506,6 +506,7 @@ export const STR = {
       contextHint: "این نظر مربوط به نمای:",
       micTitle: "صحبت برای متن",
       noSpeech: "مرورگر شما تشخیص گفتار را پشتیبانی نمی‌کند. لطفاً متن را تایپ کنید.",
+      claudeReplyLabel: "پاسخ کلود",
     },
     viewLabels: {
       interactive: "تعاملی", poetic: "شعری", museum: "موزه‌ای",
@@ -598,6 +599,7 @@ export const STR = {
       contextHint: "About the view:",
       micTitle: "Speak to text",
       noSpeech: "Your browser does not support speech recognition. Please type your message.",
+      claudeReplyLabel: "Claude's reply",
     },
     viewLabels: {
       interactive: "Interactive", poetic: "Poetic", museum: "Museum",
