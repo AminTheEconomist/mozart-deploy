@@ -44,7 +44,8 @@
       "WebFetch(domain:www.cpdl.org)",
       "Bash(curl -s -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36\" \"https://www.cpdl.org/wiki/index.php/Requiem,_KV_626_\\(Wolfgang_Amadeus_Mozart\\)\")",
       "Bash(curl -sIL -A \"Mozilla/5.0\" \"https://www.cpdl.org/wiki/index.php/Requiem,_KV_626_\\(Wolfgang_Amadeus_Mozart\\)\")",
-      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Add 4-bar SATB placeholder MusicXML for Introit so player has something to render until real CPDL engraving is downloaded; clearly labeled as demo, not Mozart's composition\")"
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Add 4-bar SATB placeholder MusicXML for Introit so player has something to render until real CPDL engraving is downloaded; clearly labeled as demo, not Mozart's composition\")",
+      "Bash(git -c user.email=\"amin@local\" -c user.name=\"Amin\" commit -m \"Restore public/scores/README with sources; add placeholder Introit MusicXML\")"
     ]
   }
 }
