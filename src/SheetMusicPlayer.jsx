@@ -7,7 +7,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
+import Soundfont from "soundfont-player";
 import { STR } from "./content.js";
+
+// Instrument options. Names match MIDI.js / MusyngKite soundfont names, free-hosted on GitHub Pages.
+// "synth" stays in-engine (additive synthesis) — no download, plays instantly.
+const INSTRUMENTS = [
+  { key: "synth",                label: { fa: "سینتیسایزر",    en: "Synth (no download)" } },
+  { key: "acoustic_grand_piano", label: { fa: "پیانو",          en: "Piano" } },
+  { key: "choir_aahs",           label: { fa: "کر (آه‌آه)",    en: "Choir (Aahs)" } },
+  { key: "voice_oohs",           label: { fa: "صدای انسانی (اوه‌اوه)", en: "Voice (Oohs)" } },
+  { key: "church_organ",         label: { fa: "ارگ کلیسا",      en: "Church Organ" } },
+  { key: "string_ensemble_1",    label: { fa: "گروه زهی",       en: "Strings" } },
+];
 
 export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", color = "#b8893a" }) {
   const containerRef = useRef(null);
@@ -15,12 +27,16 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
   const timeoutRef = useRef(null);
   const audioCtxRef = useRef(null);
   const activeNotesRef = useRef([]);
+  const instrumentRef = useRef(null);          // loaded Soundfont instance
+  const instrumentCacheRef = useRef({});       // cache by key so re-selecting is instant
 
   const [status, setStatus] = useState("loading"); // loading | ready | error | missing
   const [playing, setPlaying] = useState(false);
   const [tempo, setTempo] = useState(defaultTempo);
   const [zoom, setZoom] = useState(1);
   const [audioOn, setAudioOn] = useState(true);
+  const [instrument, setInstrument] = useState("synth");
+  const [instrumentLoading, setInstrumentLoading] = useState(false);
 
   const t = STR[lang].sheetPlayer || FALLBACK_STRINGS[lang];
 
@@ -88,6 +104,12 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
     const now = ctx.currentTime;
     for (const voice of activeNotesRef.current) {
       try {
+        // SoundFont voice (has .stop() method from soundfont-player)
+        if (typeof voice.stop === "function" && !voice.oscs) {
+          voice.stop(now + 0.05);
+          continue;
+        }
+        // Synth voice with master/oscs/lfo
         const master = voice.master || voice.gain;
         if (master) {
           master.gain.cancelScheduledValues(now);
@@ -101,6 +123,36 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
     }
     activeNotesRef.current = [];
   };
+
+  // ─── INSTRUMENT LOADING (soundfont-player) ─────────────────────────────────
+  // Soundfonts are fetched from MIDI.js / MusyngKite CDN on GitHub Pages.
+  // First selection downloads ~1-3MB; subsequent re-uses are instant (cached).
+  useEffect(() => {
+    if (instrument === "synth") {
+      instrumentRef.current = null;
+      return;
+    }
+    const cached = instrumentCacheRef.current[instrument];
+    if (cached) {
+      instrumentRef.current = cached;
+      return;
+    }
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    setInstrumentLoading(true);
+    Soundfont.instrument(ctx, instrument, { soundfont: "MusyngKite" })
+      .then(inst => {
+        instrumentCacheRef.current[instrument] = inst;
+        instrumentRef.current = inst;
+        setInstrumentLoading(false);
+      })
+      .catch(err => {
+        console.warn("Soundfont load failed for", instrument, err);
+        setInstrumentLoading(false);
+        // Fall back to synth on error
+        setInstrument("synth");
+      });
+  }, [instrument]);
 
   // Extract MIDI pitch from an OSMD note, handling API variations across versions.
   const noteToMidi = (note) => {
@@ -179,14 +231,27 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
       || osmd.cursor.iterator.currentVoiceEntries
       || [];
 
+    const inst = instrument !== "synth" ? instrumentRef.current : null;
+
     for (const ve of entries) {
       const notes = ve.Notes || ve.notes || [];
       for (const note of notes) {
         const midi = noteToMidi(note);
         if (midi == null) continue;
-        const freq = 440 * Math.pow(2, (midi - 69) / 12);
-        const voice = buildVoice(ctx, freq, durationSec);
-        activeNotesRef.current.push(voice);
+
+        if (inst) {
+          // SoundFont path — real instrument samples
+          const handle = inst.play(midi, ctx.currentTime, {
+            duration: durationSec,
+            gain: 0.5,
+          });
+          activeNotesRef.current.push(handle);
+        } else {
+          // Synth path — additive synthesis
+          const freq = 440 * Math.pow(2, (midi - 69) / 12);
+          const voice = buildVoice(ctx, freq, durationSec);
+          activeNotesRef.current.push(voice);
+        }
       }
     }
   };
@@ -319,6 +384,33 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
           />
           <span style={{ minWidth: 40, fontWeight: 600, color: color }}>{Math.round(zoom * 100)}%</span>
         </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: ".5rem", fontFamily: "Inter,sans-serif", fontSize: ".82rem", color: "#444" }}>
+          <span style={{ minWidth: 60 }}>{t.instrument}:</span>
+          <select
+            value={instrument}
+            onChange={(e) => setInstrument(e.target.value)}
+            disabled={instrumentLoading}
+            style={{
+              fontFamily: lang === "fa" ? "Vazirmatn,Inter,sans-serif" : "Inter,sans-serif",
+              fontSize: ".82rem",
+              padding: ".4rem .6rem",
+              border: `1px solid ${color}66`,
+              background: "#fff",
+              color: "#1a1a1a",
+              borderRadius: 4,
+              cursor: instrumentLoading ? "wait" : "pointer",
+              minWidth: 140,
+            }}
+          >
+            {INSTRUMENTS.map(i => (
+              <option key={i.key} value={i.key}>{i.label[lang]}</option>
+            ))}
+          </select>
+          {instrumentLoading && (
+            <span style={{ fontSize: ".72rem", color: color, fontStyle: "italic" }}>{t.instrumentLoading}…</span>
+          )}
+        </div>
       </div>
 
       {/* Notation area */}
@@ -384,6 +476,8 @@ const FALLBACK_STRINGS = {
     reset: "از ابتدا",
     tempo: "تمپو",
     zoom: "بزرگ‌نمایی",
+    instrument: "ساز",
+    instrumentLoading: "در حال بارگذاری",
     muteLabel: "بی‌صدا کردن",
     unmuteLabel: "روشن کردن صدا",
     loading: "بارگذاری نت",
@@ -399,6 +493,8 @@ const FALLBACK_STRINGS = {
     reset: "Reset",
     tempo: "Tempo",
     zoom: "Zoom",
+    instrument: "Instrument",
+    instrumentLoading: "loading",
     muteLabel: "Mute audio",
     unmuteLabel: "Unmute audio",
     loading: "Loading score",
