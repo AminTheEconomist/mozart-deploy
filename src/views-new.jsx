@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { movements, themes, STR } from "./content.js";
 import { Modal, ArcSVG, SANS, SERIF, LATIN, isFA, dirFor, alignFor } from "./components.jsx";
+import { SheetMusicPlayer } from "./SheetMusicPlayer.jsx";
 
 // ══════════════════════════════════════════════════════════════════════════════
 // VIEW: Cinematic (Dramatic & Immersive)
@@ -356,19 +357,14 @@ export function ViewSheetMusic({ lang }) {
             <span style={{ ...SANS(lang), fontSize: ".82rem", padding: ".5rem 1rem", background: "#fafaf8", color: "#888", border: "1px solid #d5d0c4" }}>{selected.author[lang]}</span>
           </div>
 
-          {/* Score area (scaffold) */}
-          <div style={{ background: "#fafaf8", border: "2px dashed #c9c2b0", padding: "5rem 2rem", textAlign: "center", marginBottom: "2.5rem", minHeight: "60vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            {selected.sheetUrl ? (
-              <iframe src={selected.sheetUrl} title={selected.latin} style={{ width: "100%", height: "70vh", border: "none", background: "#fff" }} />
-            ) : (
-              <>
-                <div style={{ fontFamily: "'Cinzel',serif", fontSize: "4rem", color: "#d5d0c4", marginBottom: "1.5rem", lineHeight: 1 }}>♪</div>
-                <p style={{ ...SERIF(lang), fontStyle: "italic", fontSize: "1.2rem", color: "#888", maxWidth: 480, lineHeight: 1.7, textAlign: "center" }}>{t.sheetPlaceholder}</p>
-                <p style={{ ...SANS(lang), textAlign: "center", fontSize: ".78rem", color: "#aaa", marginTop: "1.5rem", letterSpacing: ".15em" }}>
-                  /public/scores/{selected.latin.toLowerCase().replace(/\s+/g, "-")}.pdf
-                </p>
-              </>
-            )}
+          {/* Interactive sheet music: rendered MusicXML with cursor playback */}
+          <div style={{ marginBottom: "2.5rem" }}>
+            <SheetMusicPlayer
+              musicXmlUrl={selected.musicXmlUrl || `/scores/mozart-requiem/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.musicxml`}
+              defaultTempo={80}
+              lang={lang}
+              color={selected.color}
+            />
           </div>
 
           {/* Text reference for sight reading — Latin, Phonetics, Translation stacked per line */}
