@@ -12,12 +12,15 @@ import { STR } from "./content.js";
 export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", color = "#b8893a" }) {
   const containerRef = useRef(null);
   const osmdRef = useRef(null);
-  const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const audioCtxRef = useRef(null);
+  const activeNotesRef = useRef([]);
 
   const [status, setStatus] = useState("loading"); // loading | ready | error | missing
   const [playing, setPlaying] = useState(false);
   const [tempo, setTempo] = useState(defaultTempo);
   const [zoom, setZoom] = useState(1);
+  const [audioOn, setAudioOn] = useState(true);
 
   const t = STR[lang].sheetPlayer || FALLBACK_STRINGS[lang];
 
@@ -68,38 +71,153 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
     try { osmd.render(); osmd.cursor.show(); } catch {}
   }, [zoom, status]);
 
-  // ─── PLAYBACK CURSOR ───────────────────────────────────────────────────────
-  useEffect(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+  // ─── AUDIO ─────────────────────────────────────────────────────────────────
+  const ensureAudio = () => {
+    if (!audioCtxRef.current) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtxRef.current = new AC();
     }
-    if (!playing || status !== "ready") return;
+    const ctx = audioCtxRef.current;
+    if (ctx && ctx.state === "suspended") ctx.resume();
+    return ctx;
+  };
+
+  const stopActiveNotes = () => {
+    const ctx = audioCtxRef.current;
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    for (const { osc, gain } of activeNotesRef.current) {
+      try {
+        gain.gain.cancelScheduledValues(now);
+        gain.gain.setValueAtTime(gain.gain.value, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+        osc.stop(now + 0.08);
+      } catch {}
+    }
+    activeNotesRef.current = [];
+  };
+
+  // Extract MIDI pitch from an OSMD note, handling API variations across versions.
+  const noteToMidi = (note) => {
+    if (note == null) return null;
+    if (note.isRestFlag || note.IsRestFlag) return null;
+    // Recent OSMD: note.halfTone is MIDI pitch directly
+    if (typeof note.halfTone === "number") return note.halfTone;
+    if (typeof note.HalfTone === "number") return note.HalfTone;
+    // Fallback via Pitch object
+    const p = note.pitch || note.Pitch;
+    if (p && typeof p.frequency === "number") {
+      return Math.round(69 + 12 * Math.log2(p.frequency / 440));
+    }
+    return null;
+  };
+
+  const playCurrentNotes = (durationSec) => {
+    if (!audioOn) return;
+    const osmd = osmdRef.current;
+    const ctx = ensureAudio();
+    if (!osmd || !ctx) return;
+
+    const entries = osmd.cursor.iterator.CurrentVoiceEntries
+      || osmd.cursor.iterator.currentVoiceEntries
+      || [];
+
+    for (const ve of entries) {
+      const notes = ve.Notes || ve.notes || [];
+      for (const note of notes) {
+        const midi = noteToMidi(note);
+        if (midi == null) continue;
+        const freq = 440 * Math.pow(2, (midi - 69) / 12);
+
+        const osc = ctx.createOscillator();
+        osc.type = "triangle";
+        osc.frequency.value = freq;
+
+        const gain = ctx.createGain();
+        const now = ctx.currentTime;
+        const peak = 0.12; // keep headroom for chords (4+ voices summed)
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(peak, now + 0.02);
+        gain.gain.setValueAtTime(peak, now + Math.max(0.04, durationSec * 0.7));
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
+
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + durationSec + 0.05);
+
+        activeNotesRef.current.push({ osc, gain });
+      }
+    }
+  };
+
+  const currentStepDurationMs = () => {
+    const osmd = osmdRef.current;
+    if (!osmd) return 60000 / tempo;
+    const entries = osmd.cursor.iterator.CurrentVoiceEntries
+      || osmd.cursor.iterator.currentVoiceEntries
+      || [];
+    let minFraction = 1; // whole-note fallback
+    for (const ve of entries) {
+      const notes = ve.Notes || ve.notes || [];
+      for (const note of notes) {
+        const len = note.length || note.Length;
+        const real = len && (len.realValue ?? len.RealValue);
+        if (typeof real === "number" && real > 0) {
+          minFraction = Math.min(minFraction, real);
+        }
+      }
+    }
+    if (minFraction === 1) minFraction = 0.25; // safe default = quarter
+    // realValue is fraction of whole note; *4 → quarters; *(60/tempo) → seconds
+    return minFraction * 4 * (60000 / tempo);
+  };
+
+  // ─── PLAYBACK LOOP ─────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    if (!playing || status !== "ready") {
+      stopActiveNotes();
+      return;
+    }
     const osmd = osmdRef.current;
     if (!osmd) return;
 
-    // Quarter-note duration in ms at the chosen tempo.
-    // The cursor advances one position per step, which corresponds roughly to
-    // one "note event" — accurate enough for follow-along when the tempo is set
-    // relative to the prevailing note value the singer is reading.
-    const beatMs = 60000 / tempo;
-    intervalRef.current = setInterval(() => {
+    const tick = () => {
       const cursor = osmd.cursor;
       if (cursor.iterator.endReached) {
         setPlaying(false);
         return;
       }
-      cursor.next();
-    }, beatMs);
+      const dtMs = currentStepDurationMs();
+      stopActiveNotes();
+      playCurrentNotes(dtMs / 1000);
+      timeoutRef.current = setTimeout(() => {
+        cursor.next();
+        tick();
+      }, dtMs);
+    };
+    tick();
 
-    return () => clearInterval(intervalRef.current);
-  }, [playing, tempo, status]);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      stopActiveNotes();
+    };
+  }, [playing, tempo, status, audioOn]);
 
   const reset = () => {
     const osmd = osmdRef.current;
     if (!osmd) return;
     setPlaying(false);
+    stopActiveNotes();
     try { osmd.cursor.reset(); osmd.cursor.show(); } catch {}
+  };
+
+  const handlePlayToggle = () => {
+    ensureAudio(); // unlock audio on user gesture
+    setPlaying(p => !p);
   };
 
   // ─── RENDER ────────────────────────────────────────────────────────────────
@@ -112,7 +230,7 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
         direction: lang === "fa" ? "rtl" : "ltr",
       }}>
         <button
-          onClick={() => setPlaying(p => !p)}
+          onClick={handlePlayToggle}
           disabled={status !== "ready"}
           style={btnStyle(status === "ready", color, playing)}
         >
@@ -125,6 +243,18 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
           style={btnStyle(status === "ready", "#666", false)}
         >
           ⟲ {t.reset}
+        </button>
+
+        <button
+          onClick={() => setAudioOn(a => !a)}
+          title={audioOn ? t.muteLabel : t.unmuteLabel}
+          style={{
+            ...btnStyle(true, audioOn ? color : "#999", false),
+            padding: ".6rem .9rem",
+            minWidth: 0,
+          }}
+        >
+          {audioOn ? "🔊" : "🔇"}
         </button>
 
         <div style={{ display: "flex", alignItems: "center", gap: ".5rem", fontFamily: "Inter,sans-serif", fontSize: ".82rem", color: "#444" }}>
@@ -213,12 +343,14 @@ const FALLBACK_STRINGS = {
     reset: "از ابتدا",
     tempo: "تمپو",
     zoom: "بزرگ‌نمایی",
+    muteLabel: "بی‌صدا کردن",
+    unmuteLabel: "روشن کردن صدا",
     loading: "بارگذاری نت",
     errorTitle: "خواندن فایل نت ممکن نشد",
     errorBody: "فایل MusicXML در دسترس نیست یا قالب آن قابل خواندن نیست. لطفاً فایل را در پوشه public/scores/ قرار دهید.",
     missingTitle: "فایل نت تعریف نشده",
     missingBody: "برای این موومان فایل MusicXML تعیین نشده است. فیلد sheetUrl را در content/works/*.json پر کنید.",
-    hint: "روی پخش کلیک کنید تا مکان‌نما با تمپوی تنظیم‌شده در نت حرکت کند. تمپو را تغییر دهید تا سرعت دلخواه را پیدا کنید.",
+    hint: "روی پخش کلیک کنید تا نت‌ها شنیده و مکان‌نما همراه با آن‌ها حرکت کند. تمپو و صدا را با دکمه‌های بالا تنظیم کنید.",
   },
   en: {
     play: "Play",
@@ -226,11 +358,13 @@ const FALLBACK_STRINGS = {
     reset: "Reset",
     tempo: "Tempo",
     zoom: "Zoom",
+    muteLabel: "Mute audio",
+    unmuteLabel: "Unmute audio",
     loading: "Loading score",
     errorTitle: "Could not load the score",
     errorBody: "The MusicXML file isn't reachable or can't be parsed. Drop a .musicxml or .xml file into public/scores/.",
     missingTitle: "No score file yet",
     missingBody: "This movement has no MusicXML file assigned. Set the sheetUrl field in content/works/*.json.",
-    hint: "Press Play to advance the cursor through the score at the chosen tempo. Adjust the slider to find your reading speed.",
+    hint: "Press Play to hear the notes and watch the cursor follow along. Adjust tempo and audio with the buttons above.",
   },
 };
