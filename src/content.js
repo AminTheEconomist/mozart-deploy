@@ -511,7 +511,7 @@ export const STR = {
     viewLabels: {
       interactive: "تعاملی", poetic: "شعری", museum: "موزه‌ای",
       dramatic: "سینمایی", minimal: "ساده", editorial: "مجله‌ای",
-      illuminated: "معنوی", performance: "اجرا", sheet: "نت‌ها",
+      illuminated: "معنوی", performance: "اجرا", sheet: "نت",
     },
   },
   en: {

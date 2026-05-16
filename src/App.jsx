@@ -44,10 +44,10 @@ export default function App() {
       {/* Top bar: view switcher + language toggle */}
       <div style={{ position: "fixed", top: "1rem", left: "50%", transform: "translateX(-50%)", zIndex: 300, display: "flex", gap: ".5rem", alignItems: "center" }}>
         {/* View switcher */}
-        <div style={{ background: "rgba(15,12,8,.92)", backdropFilter: "blur(16px)", border: "1px solid rgba(184,137,58,.4)", borderRadius: 100, padding: ".3rem", display: "flex", gap: ".2rem", boxShadow: "0 8px 32px rgba(0,0,0,.4)", overflowX: "auto", maxWidth: "70vw" }}>
+        <div style={{ background: "rgba(15,12,8,.92)", backdropFilter: "blur(16px)", border: "1px solid rgba(184,137,58,.4)", borderRadius: 24, padding: ".3rem", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: ".2rem", boxShadow: "0 8px 32px rgba(0,0,0,.4)", maxWidth: "min(92vw, 1100px)" }}>
           {VIEW_ORDER.map(v => (
             <button key={v} onClick={() => { setView(v); window.scrollTo({ top: 0 }); }}
-              style={{ fontFamily: lang === "fa" ? "Vazirmatn,Tahoma,sans-serif" : "Inter,sans-serif", fontSize: ".72rem", padding: ".5rem 1rem", border: "none", borderRadius: 100, cursor: "pointer", transition: "all .25s", background: view === v ? "#b8893a" : "transparent", color: view === v ? "#1a1208" : "rgba(245,241,235,.6)", fontWeight: view === v ? 700 : 400, whiteSpace: "nowrap" }}>
+              style={{ fontFamily: lang === "fa" ? "Vazirmatn,Tahoma,sans-serif" : "Inter,sans-serif", fontSize: ".7rem", padding: ".45rem .8rem", border: "none", borderRadius: 100, cursor: "pointer", transition: "all .25s", background: view === v ? "#b8893a" : "transparent", color: view === v ? "#1a1208" : "rgba(245,241,235,.6)", fontWeight: view === v ? 700 : 400, whiteSpace: "nowrap" }}>
               {labels[v]}
             </button>
           ))}
