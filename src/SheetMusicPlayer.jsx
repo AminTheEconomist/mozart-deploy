@@ -75,7 +75,7 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
 
     return () => {
       try { osmd.clear(); } catch {}
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) { clearTimeout(timeoutRef.current); timeoutRef.current = null; }
     };
   }, [musicXmlUrl, color]);
 
