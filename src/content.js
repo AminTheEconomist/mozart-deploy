@@ -510,7 +510,7 @@ export const STR = {
     },
     viewLabels: {
       interactive: "تعاملی", poetic: "شعری", museum: "موزه‌ای",
-      dramatic: "سینمایی", minimal: "ساده", editorial: "مجله‌ای",
+      cinematic: "سینمایی", minimal: "ساده", editorial: "مجله‌ای",
       illuminated: "معنوی", performance: "اجرا", sheet: "نت",
     },
   },
@@ -603,7 +603,7 @@ export const STR = {
     },
     viewLabels: {
       interactive: "Interactive", poetic: "Poetic", museum: "Museum",
-      dramatic: "Cinematic", minimal: "Minimal", editorial: "Editorial",
+      cinematic: "Cinematic", minimal: "Minimal", editorial: "Editorial",
       illuminated: "Spiritual", performance: "Performance", sheet: "Score",
     },
   },
