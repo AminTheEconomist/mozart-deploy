@@ -86,12 +86,17 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
     const ctx = audioCtxRef.current;
     if (!ctx) return;
     const now = ctx.currentTime;
-    for (const { osc, gain } of activeNotesRef.current) {
+    for (const voice of activeNotesRef.current) {
       try {
-        gain.gain.cancelScheduledValues(now);
-        gain.gain.setValueAtTime(gain.gain.value, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
-        osc.stop(now + 0.08);
+        const master = voice.master || voice.gain;
+        if (master) {
+          master.gain.cancelScheduledValues(now);
+          master.gain.setValueAtTime(master.gain.value, now);
+          master.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+        }
+        const oscs = voice.oscs || (voice.osc ? [voice.osc] : []);
+        oscs.forEach(o => { try { o.stop(now + 0.08); } catch {} });
+        if (voice.lfo) { try { voice.lfo.stop(now + 0.08); } catch {} }
       } catch {}
     }
     activeNotesRef.current = [];
@@ -112,6 +117,58 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
     return null;
   };
 
+  // Richer synthesis: sum of sine harmonics (organ/voice-like body), unified
+  // vibrato LFO across all harmonics, softer attack and release than a pure
+  // synth. Each voice has its own master gain so chord summing stays clean.
+  const HARMONICS = [
+    { mult: 1, amp: 1.00 },   // fundamental
+    { mult: 2, amp: 0.35 },   // octave — gives body
+    { mult: 3, amp: 0.18 },   // perfect twelfth — warmth
+    { mult: 4, amp: 0.08 },   // two octaves
+    { mult: 5, amp: 0.04 },   // bright shimmer
+  ];
+
+  const buildVoice = (ctx, freq, durationSec) => {
+    const now = ctx.currentTime;
+    const master = ctx.createGain();
+    master.connect(ctx.destination);
+
+    // Soft envelope — feels more like sustained singing/organ than a synth pluck
+    const peak = 0.07; // per-note; 4 voices summed ≈ 0.28, well below clipping
+    const attack = 0.09;
+    const release = Math.min(0.25, durationSec * 0.4);
+    master.gain.setValueAtTime(0, now);
+    master.gain.linearRampToValueAtTime(peak, now + attack);
+    master.gain.setValueAtTime(peak, now + Math.max(attack + 0.02, durationSec - release));
+    master.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
+
+    // 5 Hz vibrato LFO; modulates the detune of every harmonic in unison
+    const lfo = ctx.createOscillator();
+    lfo.type = "sine";
+    lfo.frequency.value = 5;
+    const lfoDepth = ctx.createGain();
+    lfoDepth.gain.value = 8; // cents (~half a semitone fraction)
+    lfo.connect(lfoDepth);
+
+    const oscs = HARMONICS.map(({ mult, amp }) => {
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = freq * mult;
+      lfoDepth.connect(osc.detune);
+
+      const harmonicGain = ctx.createGain();
+      harmonicGain.gain.value = amp;
+      osc.connect(harmonicGain).connect(master);
+      return osc;
+    });
+
+    oscs.forEach(o => { o.start(now); o.stop(now + durationSec + 0.12); });
+    lfo.start(now);
+    lfo.stop(now + durationSec + 0.12);
+
+    return { oscs, lfo, master };
+  };
+
   const playCurrentNotes = (durationSec) => {
     if (!audioOn) return;
     const osmd = osmdRef.current;
@@ -128,24 +185,8 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
         const midi = noteToMidi(note);
         if (midi == null) continue;
         const freq = 440 * Math.pow(2, (midi - 69) / 12);
-
-        const osc = ctx.createOscillator();
-        osc.type = "triangle";
-        osc.frequency.value = freq;
-
-        const gain = ctx.createGain();
-        const now = ctx.currentTime;
-        const peak = 0.12; // keep headroom for chords (4+ voices summed)
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(peak, now + 0.02);
-        gain.gain.setValueAtTime(peak, now + Math.max(0.04, durationSec * 0.7));
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
-
-        osc.connect(gain).connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + durationSec + 0.05);
-
-        activeNotesRef.current.push({ osc, gain });
+        const voice = buildVoice(ctx, freq, durationSec);
+        activeNotesRef.current.push(voice);
       }
     }
   };
