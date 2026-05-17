@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { WorkProvider, useWork } from "./WorkContext.jsx";
-import { WORK_LIST } from "./works/index.js";
+import { WORK_LIST, DEFAULT_WORK_SLUG } from "./works/index.js";
 import { ViewInteractive, ViewPoetic, ViewMuseum } from "./views-classic.jsx";
 import { ViewCinematic, ViewMinimal, ViewEditorial, ViewIlluminated, ViewSheetMusic, ViewPerformance } from "./views-new.jsx";
 import { FeedbackWidget } from "./FeedbackWidget.jsx";
@@ -28,9 +28,19 @@ export default function App() {
 }
 
 function AppContent() {
-  const [view, setView] = useState("poetic");
-  const [lang, setLang] = useState("fa");
   const { slug, setSlug, STR } = useWork();
+  // View defaults to the current work's preferred landing view (sheet for short scored
+  // pieces, poetic for big liturgical works). Computed once at mount.
+  const initialView = (WORK_LIST.find(w => w.slug === slug)?.defaultView) || "poetic";
+  const [view, setView] = useState(initialView);
+  const [lang, setLang] = useState("fa");
+
+  // When the user switches works, jump to that work's defaultView automatically.
+  useEffect(() => {
+    const w = WORK_LIST.find(w => w.slug === slug);
+    if (w?.defaultView) setView(w.defaultView);
+  }, [slug]);
+
   const ViewComponent = VIEWS[view];
   const labels = STR[lang].viewLabels;
 

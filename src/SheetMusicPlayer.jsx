@@ -21,7 +21,7 @@ const INSTRUMENTS = [
   { key: "string_ensemble_1",    label: { fa: "گروه زهی",       en: "Strings" } },
 ];
 
-export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", color = "#b8893a" }) {
+export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", color = "#b8893a", autoplay = false, onEnd, onAutoplayStarted }) {
   const containerRef = useRef(null);
   const osmdRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -102,6 +102,18 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
     osmd.zoom = zoom;
     try { osmd.render(); osmd.cursor.show(); } catch {}
   }, [zoom, status]);
+
+  // ─── AUTO-PLAY ON LOAD ─────────────────────────────────────────────────────
+  // When the parent arms `autoplay` (e.g. chaining sections), start playback
+  // automatically as soon as the score is ready, then notify the parent so it
+  // can clear the flag (otherwise we'd re-trigger on every render).
+  useEffect(() => {
+    if (autoplay && status === "ready" && !playing) {
+      ensureAudio(); // user-gesture wasn't strictly here, but the chain originated from one
+      setPlaying(true);
+      onAutoplayStarted?.();
+    }
+  }, [autoplay, status]);
 
   // ─── AUDIO ─────────────────────────────────────────────────────────────────
   const ensureAudio = () => {
@@ -330,6 +342,8 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
       const cursor = osmd.cursor;
       if (cursor.iterator.endReached) {
         setPlaying(false);
+        // Notify parent so it can chain to the next section / movement.
+        onEnd?.();
         return;
       }
       const dtMs = currentStepDurationMs();

@@ -314,8 +314,30 @@ export function ViewIlluminated({ lang }) {
 export function ViewSheetMusic({ lang }) {
   const { movements, themes, STR, slug } = useWork();
   const [selected, setSelected] = useState(movements[0]);
+  // chainAutoplay: when true, the player will start the freshly-loaded movement
+  // automatically. Set when one movement's playback ends and we advance to the
+  // next; cleared by the player itself via onAutoplayStarted.
+  const [chainAutoplay, setChainAutoplay] = useState(false);
   const t = STR[lang];
   const L = selected[lang];
+
+  // Manually selecting a movement breaks the chain so the new movement waits
+  // for the user to press Play (no surprise auto-start).
+  const handleSelect = (m) => {
+    setChainAutoplay(false);
+    setSelected(m);
+  };
+
+  // Called by the player when a section ends naturally. Find the next movement;
+  // if there is one, switch to it and arm autoplay so playback continues seamlessly
+  // (Opening → Middle → Climax). On the last section, do nothing.
+  const handleSectionEnd = () => {
+    const idx = movements.findIndex(m => m.latin === selected.latin);
+    if (idx >= 0 && idx < movements.length - 1) {
+      setSelected(movements[idx + 1]);
+      setChainAutoplay(true);
+    }
+  };
 
   return (
     <div style={{ background: "#fafaf8", minHeight: "100vh", color: "#1a1a1a" }}>
@@ -331,7 +353,7 @@ export function ViewSheetMusic({ lang }) {
               const sel = selected?.latin === m.latin;
               const Lm = m[lang];
               return (
-                <button key={m.latin} onClick={() => setSelected(m)}
+                <button key={m.latin} onClick={() => handleSelect(m)}
                   style={{ display: "block", width: "100%", textAlign: isFA(lang) ? "right" : "left", padding: ".85rem 1.5rem", background: sel ? "rgba(184,137,58,.15)" : "transparent", border: "none", [isFA(lang) ? "borderRight" : "borderLeft"]: sel ? `3px solid ${m.color}` : "3px solid transparent", cursor: "pointer", transition: "all .2s", color: sel ? "#fafaf8" : "rgba(250,250,248,.65)", direction: dirFor(lang) }}>
                   <div style={{ display: "flex", alignItems: "baseline", gap: ".75rem" }}>
                     <span style={{ fontFamily: "'Cinzel',serif", fontSize: ".82rem", color: m.color, minWidth: "2rem" }}>{m.num}</span>
@@ -362,13 +384,19 @@ export function ViewSheetMusic({ lang }) {
             <span style={{ ...SANS(lang), fontSize: ".82rem", padding: ".5rem 1rem", background: "#fafaf8", color: "#888", border: "1px solid #d5d0c4" }}>{selected.author[lang]}</span>
           </div>
 
-          {/* Interactive sheet music: rendered MusicXML with cursor playback */}
+          {/* Interactive sheet music: rendered MusicXML with cursor playback.
+              key={selected.latin} forces a clean re-mount per movement so OSMD
+              + state cleanly reset for the next section in the chain. */}
           <div style={{ marginBottom: "2.5rem" }}>
             <SheetMusicPlayer
+              key={selected.latin}
               musicXmlUrl={selected.musicXmlUrl || `/scores/${slug}/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.musicxml`}
               defaultTempo={80}
               lang={lang}
               color={selected.color}
+              autoplay={chainAutoplay}
+              onAutoplayStarted={() => setChainAutoplay(false)}
+              onEnd={handleSectionEnd}
             />
           </div>
 
