@@ -123,6 +123,10 @@ function AppContent() {
           .app-left-rail { display: none !important; }
           .app-bottom-bar { display: flex !important; }
           .app-content { padding-left: 0 !important; padding-bottom: 4.5rem !important; }
+          /* Lift the feedback button + update banner above the mobile
+             bottom-bar nav so they don't stack on top of each other. */
+          .feedback-fab { bottom: 5.25rem !important; }
+          .update-banner { bottom: 5.25rem !important; }
         }
 
         /* ─── Sheet view — phone layout (sidebar → horizontal pill strip) ─── */

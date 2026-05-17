@@ -89,10 +89,12 @@ export function FeedbackWidget({ lang, view, selected }) {
 
   return (
     <>
-      {/* Floating button */}
+      {/* Floating button — classname lets App.jsx CSS lift it above the
+          mobile bottom-bar nav without an inline media query */}
       <button
         onClick={() => setOpen(true)}
         aria-label={t.openLabel}
+        className="feedback-fab"
         style={{
           position: "fixed",
           bottom: "1.5rem",

@@ -71,7 +71,7 @@ export function UpdateBanner({ lang = "fa" }) {
     : { msg: "A newer version of this site is ready", btn: "Reload", dismiss: "✕" };
 
   return (
-    <div style={{
+    <div className="update-banner" style={{
       position: "fixed",
       bottom: "1rem",
       left: "50%",
