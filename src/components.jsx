@@ -1,5 +1,5 @@
 // ─── SHARED COMPONENTS & STYLE HELPERS ───────────────────────────────────────
-import { arcPoints, STR } from "./content.js";
+import { useWork } from "./WorkContext.jsx";
 
 // ─── STYLE HELPERS ───────────────────────────────────────────────────────────
 export const isFA = (lang) => lang === "fa";
@@ -33,6 +33,7 @@ export const LATIN = {
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 export function Modal({ m, lang, onClose }) {
+  const { STR } = useWork();
   if (!m) return null;
   const L = m[lang];
   const t = STR[lang];
@@ -84,6 +85,7 @@ export function Modal({ m, lang, onClose }) {
 
 // ─── ARC SVG ─────────────────────────────────────────────────────────────────
 export function ArcSVG({ selected, onSelect, lang, light = false, bgColor }) {
+  const { arcPoints, STR } = useWork();
   const path = arcPoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
   const tc = light ? "rgba(15,26,46,0.5)" : "rgba(255,255,255,0.45)";
   const bg = bgColor ?? (light ? "#f3ead5" : "#080705");

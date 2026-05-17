@@ -1,6 +1,6 @@
 // ─── NEW VIEWS: Cinematic · Minimal · Editorial · Illuminated · Sheet Music ──
 import { useState } from "react";
-import { movements, themes, STR } from "./content.js";
+import { useWork } from "./WorkContext.jsx";
 import { Modal, ArcSVG, SANS, SERIF, LATIN, isFA, dirFor, alignFor } from "./components.jsx";
 import { SheetMusicPlayer } from "./SheetMusicPlayer.jsx";
 
@@ -9,6 +9,7 @@ import { SheetMusicPlayer } from "./SheetMusicPlayer.jsx";
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewCinematic({ lang }) {
   const [selected, setSelected] = useState(null);
+  const { movements, themes, STR, slug } = useWork();
   const t = STR[lang];
   return (
     <div style={{ background: "#03020a", minHeight: "100vh", overflow: "hidden" }}>
@@ -74,6 +75,7 @@ export function ViewCinematic({ lang }) {
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewMinimal({ lang }) {
   const [selected, setSelected] = useState(null);
+  const { movements, themes, STR, slug } = useWork();
   const t = STR[lang];
   return (
     <div style={{ background: "#fdfcf8", minHeight: "100vh", color: "#1a1a1a" }}>
@@ -150,6 +152,7 @@ export function ViewMinimal({ lang }) {
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewEditorial({ lang }) {
   const [selected, setSelected] = useState(null);
+  const { movements, themes, STR, slug } = useWork();
   const t = STR[lang];
   return (
     <div style={{ background: "#f8f5ee", minHeight: "100vh", color: "#1a1a1a" }}>
@@ -236,6 +239,7 @@ export function ViewEditorial({ lang }) {
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewIlluminated({ lang }) {
   const [selected, setSelected] = useState(null);
+  const { movements, themes, STR, slug } = useWork();
   const t = STR[lang];
   return (
     <div style={{ background: "linear-gradient(180deg,#1a0d1a 0%,#0d0a1a 50%,#1a0d0d 100%)", minHeight: "100vh", color: "#f3ead5" }}>
@@ -309,6 +313,7 @@ export function ViewIlluminated({ lang }) {
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewSheetMusic({ lang }) {
   const [selected, setSelected] = useState(movements[0]);
+  const { movements, themes, STR, slug } = useWork();
   const t = STR[lang];
   const L = selected[lang];
 
@@ -360,7 +365,7 @@ export function ViewSheetMusic({ lang }) {
           {/* Interactive sheet music: rendered MusicXML with cursor playback */}
           <div style={{ marginBottom: "2.5rem" }}>
             <SheetMusicPlayer
-              musicXmlUrl={selected.musicXmlUrl || `/scores/mozart-requiem/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.musicxml`}
+              musicXmlUrl={selected.musicXmlUrl || `/scores/${slug}/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.musicxml`}
               defaultTempo={80}
               lang={lang}
               color={selected.color}
@@ -445,6 +450,7 @@ function Scene({ scene, lang }) {
 
 export function ViewPerformance({ lang }) {
   const [selected, setSelected] = useState(null);
+  const { movements, themes, STR, slug } = useWork();
   const t = STR[lang];
   return (
     <div style={{ background: "#0a0806", minHeight: "100vh" }}>

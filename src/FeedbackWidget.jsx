@@ -4,7 +4,7 @@
 // Voice uses the browser Web Speech API — free, no infra needed, Chrome/Safari/Edge.
 
 import { useState, useRef, useEffect } from "react";
-import { STR } from "./content.js";
+import { useWork } from "./WorkContext.jsx";
 
 const SANS = (lang) => ({
   fontFamily: lang === "fa"
@@ -20,6 +20,7 @@ export function FeedbackWidget({ lang, view, selected }) {
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [reply, setReply] = useState(null);
   const recognitionRef = useRef(null);
+  const { STR } = useWork();
   const t = STR[lang].feedback;
   const dir = lang === "fa" ? "rtl" : "ltr";
 

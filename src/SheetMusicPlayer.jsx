@@ -8,7 +8,7 @@
 import { useEffect, useRef, useState } from "react";
 import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
 import Soundfont from "soundfont-player";
-import { STR } from "./content.js";
+import { useWork } from "./WorkContext.jsx";
 
 // Instrument options. Names match MIDI.js / MusyngKite soundfont names, free-hosted on GitHub Pages.
 // "synth" stays in-engine (additive synthesis) — no download, plays instantly.
@@ -38,6 +38,7 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
   const [instrument, setInstrument] = useState("synth");
   const [instrumentLoading, setInstrumentLoading] = useState(false);
 
+  const { STR } = useWork();
   const t = STR[lang].sheetPlayer || FALLBACK_STRINGS[lang];
 
   // ─── LOAD + RENDER ─────────────────────────────────────────────────────────

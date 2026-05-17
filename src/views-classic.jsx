@@ -1,6 +1,6 @@
 // ─── CLASSIC VIEWS: Interactive (dark) · Poetic (parchment) · Museum (cream) ─
 import { useState } from "react";
-import { movements, themes, STR } from "./content.js";
+import { useWork } from "./WorkContext.jsx";
 import { Modal, ArcSVG, SANS, SERIF, LATIN, isFA, dirFor, alignFor } from "./components.jsx";
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -9,6 +9,7 @@ import { Modal, ArcSVG, SANS, SERIF, LATIN, isFA, dirFor, alignFor } from "./com
 export function ViewInteractive({ lang }) {
   const [selected, setSelected] = useState(null);
   const [openTheme, setOpenTheme] = useState(null);
+  const { movements, themes, STR } = useWork();
   const t = STR[lang];
 
   return (
@@ -101,6 +102,7 @@ export function ViewInteractive({ lang }) {
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewPoetic({ lang }) {
   const [selected, setSelected] = useState(null);
+  const { movements, themes, STR } = useWork();
   const t = STR[lang];
   return (
     <div style={{ background: "#f3ead5", minHeight: "100vh", backgroundImage: "radial-gradient(ellipse at 20% 10%,rgba(184,137,58,.08),transparent 50%),radial-gradient(ellipse at 80% 60%,rgba(107,31,31,.05),transparent 50%)" }}>
@@ -220,6 +222,7 @@ export function ViewPoetic({ lang }) {
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewMuseum({ lang }) {
   const [selected, setSelected] = useState(null);
+  const { movements, themes, STR } = useWork();
   const t = STR[lang];
   return (
     <div style={{ background: "#f5f1eb", minHeight: "100vh" }}>
