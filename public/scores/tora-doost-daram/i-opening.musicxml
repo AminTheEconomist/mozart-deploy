@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+  <work>
+    <work-title>Tora Doost Daram — I. Opening</work-title>
+  </work>
+  <identification>
+    <creator type="composer">Farhad Mehrad (original) · Teymur Saba (choral arr.)</creator>
+    <creator type="lyricist">Mohd. Abbas Saade</creator>
+    <miscellaneous>
+      <miscellaneous-field name="note">Approximated SATB harmonization for the opening 12 measures.
+        Pitches are placeholders pending OMR or hand-transcription from the original score.
+        Lyrics, meter, tempo and dynamic shape are accurate to the printed score.</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id="P1"><part-name>Soprano</part-name></score-part>
+    <score-part id="P2"><part-name>Alto</part-name></score-part>
+    <score-part id="P3"><part-name>Tenor</part-name></score-part>
+    <score-part id="P4"><part-name>Bass</part-name></score-part>
+  </part-list>
+
+  <!-- ═══════════════════════════ SOPRANO ═══════════════════════════ -->
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>-2</fifths><mode>minor</mode></key>
+        <time><beats>3</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <direction placement="above"><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>84</per-minute></metronome></direction-type></direction>
+      <direction placement="below"><direction-type><dynamics><p/></dynamics></direction-type><sound dynamics="50"/></direction>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/><lyric><syllabic>single</syllabic><text>(hum)</text></lyric></note>
+    </measure>
+    <measure number="2"><note><pitch><step>G</step><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+    <measure number="3"><note><pitch><step>A</step><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+    <measure number="4"><note><pitch><step>G</step><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+
+    <measure number="5">
+      <direction placement="below"><direction-type><dynamics><mp/></dynamics></direction-type><sound dynamics="65"/></direction>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>Poo</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>che</text></lyric></note>
+      <note><rest/><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="6">
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>ja</text></lyric></note>
+      <note><pitch><step>B</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>haan</text></lyric></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>hich</text></lyric></note>
+    </measure>
+    <measure number="7">
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>a</text></lyric></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>gar</text></lyric></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>doost</text></lyric></note>
+    </measure>
+    <measure number="8">
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>daa</text></lyric></note>
+      <note><pitch><step>B</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>middle</syllabic><text>ram</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>to</text></lyric></note>
+    </measure>
+
+    <measure number="9">
+      <direction placement="below"><direction-type><dynamics><mf/></dynamics></direction-type><sound dynamics="80"/></direction>
+      <note><pitch><step>B</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>Ey</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>ko</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>han</text></lyric></note>
+    </measure>
+    <measure number="10">
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>pi</text></lyric></note>
+      <note><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>re</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>jaa</text></lyric></note>
+    </measure>
+    <measure number="11">
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>vid</text></lyric></note>
+      <note><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>bor</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>naa</text></lyric></note>
+    </measure>
+    <measure number="12">
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type><lyric><syllabic>single</syllabic><text>to</text></lyric></note>
+      <note><rest/><duration>4</duration><type>quarter</type></note>
+      <barline location="right"><bar-style>light-heavy</bar-style></barline>
+    </measure>
+  </part>
+
+  <!-- ═══════════════════════════ ALTO ═══════════════════════════ -->
+  <part id="P2">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>-2</fifths><mode>minor</mode></key>
+        <time><beats>3</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/><lyric><syllabic>single</syllabic><text>(hum)</text></lyric></note>
+    </measure>
+    <measure number="2"><note><pitch><step>D</step><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+    <measure number="3"><note><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+    <measure number="4"><note><pitch><step>D</step><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+
+    <measure number="5">
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>Poo</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>che</text></lyric></note>
+      <note><rest/><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="6">
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>ja</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>haan</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>hich</text></lyric></note>
+    </measure>
+    <measure number="7">
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>a</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>gar</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>doost</text></lyric></note>
+    </measure>
+    <measure number="8">
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>daa</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>middle</syllabic><text>ram</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>to</text></lyric></note>
+    </measure>
+
+    <measure number="9">
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>Ey</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>ko</text></lyric></note>
+      <note><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>han</text></lyric></note>
+    </measure>
+    <measure number="10">
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>pi</text></lyric></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>re</text></lyric></note>
+      <note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>jaa</text></lyric></note>
+    </measure>
+    <measure number="11">
+      <note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>vid</text></lyric></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>bor</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>naa</text></lyric></note>
+    </measure>
+    <measure number="12">
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><type>half</type><lyric><syllabic>single</syllabic><text>to</text></lyric></note>
+      <note><rest/><duration>4</duration><type>quarter</type></note>
+      <barline location="right"><bar-style>light-heavy</bar-style></barline>
+    </measure>
+  </part>
+
+  <!-- ═══════════════════════════ TENOR ═══════════════════════════ -->
+  <part id="P3">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>-2</fifths><mode>minor</mode></key>
+        <time><beats>3</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change></clef>
+      </attributes>
+      <note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>12</duration><type>half</type><dot/><lyric><syllabic>single</syllabic><text>(hum)</text></lyric></note>
+    </measure>
+    <measure number="2"><note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+    <measure number="3"><note><pitch><step>C</step><octave>4</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+    <measure number="4"><note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+
+    <measure number="5">
+      <note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>Poo</text></lyric></note>
+      <note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>che</text></lyric></note>
+      <note><rest/><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="6">
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>ja</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>haan</text></lyric></note>
+      <note><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>hich</text></lyric></note>
+    </measure>
+    <measure number="7">
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>a</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>gar</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>doost</text></lyric></note>
+    </measure>
+    <measure number="8">
+      <note><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>daa</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>middle</syllabic><text>ram</text></lyric></note>
+      <note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>to</text></lyric></note>
+    </measure>
+
+    <measure number="9">
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>Ey</text></lyric></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>ko</text></lyric></note>
+      <note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>han</text></lyric></note>
+    </measure>
+    <measure number="10">
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>pi</text></lyric></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>re</text></lyric></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>jaa</text></lyric></note>
+    </measure>
+    <measure number="11">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>vid</text></lyric></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>bor</text></lyric></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>naa</text></lyric></note>
+    </measure>
+    <measure number="12">
+      <note><pitch><step>B</step><alter>-1</alter><octave>3</octave></pitch><duration>8</duration><type>half</type><lyric><syllabic>single</syllabic><text>to</text></lyric></note>
+      <note><rest/><duration>4</duration><type>quarter</type></note>
+      <barline location="right"><bar-style>light-heavy</bar-style></barline>
+    </measure>
+  </part>
+
+  <!-- ═══════════════════════════ BASS ═══════════════════════════ -->
+  <part id="P4">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>-2</fifths><mode>minor</mode></key>
+        <time><beats>3</beats><beat-type>4</beat-type></time>
+        <clef><sign>F</sign><line>4</line></clef>
+      </attributes>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>12</duration><type>half</type><dot/><lyric><syllabic>single</syllabic><text>(hum)</text></lyric></note>
+    </measure>
+    <measure number="2"><note><pitch><step>G</step><octave>2</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+    <measure number="3"><note><pitch><step>A</step><octave>2</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+    <measure number="4"><note><pitch><step>G</step><octave>2</octave></pitch><duration>12</duration><type>half</type><dot/></note></measure>
+
+    <measure number="5">
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>Poo</text></lyric></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>che</text></lyric></note>
+      <note><rest/><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="6">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>ja</text></lyric></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>haan</text></lyric></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>hich</text></lyric></note>
+    </measure>
+    <measure number="7">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>a</text></lyric></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>gar</text></lyric></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>doost</text></lyric></note>
+    </measure>
+    <measure number="8">
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>daa</text></lyric></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>middle</syllabic><text>ram</text></lyric></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>to</text></lyric></note>
+    </measure>
+
+    <measure number="9">
+      <note><pitch><step>E</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>single</syllabic><text>Ey</text></lyric></note>
+      <note><pitch><step>E</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>ko</text></lyric></note>
+      <note><pitch><step>E</step><alter>-1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>han</text></lyric></note>
+    </measure>
+    <measure number="10">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>pi</text></lyric></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>re</text></lyric></note>
+      <note><pitch><step>B</step><alter>-1</alter><octave>2</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>jaa</text></lyric></note>
+    </measure>
+    <measure number="11">
+      <note><pitch><step>B</step><alter>-1</alter><octave>2</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>vid</text></lyric></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>begin</syllabic><text>bor</text></lyric></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><lyric><syllabic>end</syllabic><text>naa</text></lyric></note>
+    </measure>
+    <measure number="12">
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>8</duration><type>half</type><lyric><syllabic>single</syllabic><text>to</text></lyric></note>
+      <note><rest/><duration>4</duration><type>quarter</type></note>
+      <barline location="right"><bar-style>light-heavy</bar-style></barline>
+    </measure>
+  </part>
+</score-partwise>
