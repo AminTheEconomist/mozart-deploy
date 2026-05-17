@@ -391,6 +391,7 @@ export function ViewSheetMusic({ lang }) {
             <SheetMusicPlayer
               key={selected.latin}
               musicXmlUrl={selected.musicXmlUrl || `/scores/${slug}/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.musicxml`}
+              audioUrl={selected.audioUrl || `/audio/${slug}/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.mp3`}
               defaultTempo={80}
               lang={lang}
               color={selected.color}

@@ -12,8 +12,12 @@ import { useWork } from "./WorkContext.jsx";
 
 // Instrument options. Names match MIDI.js / MusyngKite soundfont names, free-hosted on GitHub Pages.
 // "synth" stays in-engine (additive synthesis) — no download, plays instantly.
+// "ai-vocal" plays a pre-rendered MP3 of the actual choir singing the lyrics (generated
+// via Suno / Udio / Synthesizer V and dropped into public/audio/{slug}/{section}.mp3).
+// The on-screen cursor still walks the score on the tempo clock for visual sync.
 const INSTRUMENTS = [
   { key: "synth",                label: { fa: "سینتیسایزر",    en: "Synth (no download)" } },
+  { key: "ai-vocal",             label: { fa: "🎤 صدای واقعی (AI)", en: "🎤 AI Vocal (real choir)" }, requiresAudio: true },
   { key: "acoustic_grand_piano", label: { fa: "پیانو",          en: "Piano" } },
   { key: "choir_aahs",           label: { fa: "کر (آه‌آه)",    en: "Choir (Aahs)" } },
   { key: "voice_oohs",           label: { fa: "صدای انسانی (اوه‌اوه)", en: "Voice (Oohs)" } },
@@ -21,7 +25,7 @@ const INSTRUMENTS = [
   { key: "string_ensemble_1",    label: { fa: "گروه زهی",       en: "Strings" } },
 ];
 
-export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", color = "#b8893a", autoplay = false, onEnd, onAutoplayStarted }) {
+export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lang = "fa", color = "#b8893a", autoplay = false, onEnd, onAutoplayStarted }) {
   const containerRef = useRef(null);
   const osmdRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -30,6 +34,8 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
   const instrumentRef = useRef(null);          // loaded Soundfont instance
   const instrumentCacheRef = useRef({});       // cache by key so re-selecting is instant
   const partsRef = useRef([]);                 // mirror of `parts` state, read inside playback closure
+  const aiAudioRef = useRef(null);             // <audio> element for AI-vocal MP3 playback
+  const [aiAudioAvailable, setAiAudioAvailable] = useState(false); // probed once per audioUrl
 
   const [status, setStatus] = useState("loading"); // loading | ready | error | missing
   const [playing, setPlaying] = useState(false);
@@ -45,6 +51,55 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
   // Keep ref in sync so the playback loop reads the latest toggle state
   // without needing to restart on every checkbox flip.
   useEffect(() => { partsRef.current = parts; }, [parts]);
+
+  // Probe (HEAD) the AI-vocal audio URL once per movement so we can disable
+  // the 🎤 option in the dropdown when there's no MP3 yet for this section.
+  useEffect(() => {
+    if (!audioUrl) { setAiAudioAvailable(false); return; }
+    let cancelled = false;
+    fetch(audioUrl, { method: "HEAD" })
+      .then(r => { if (!cancelled) setAiAudioAvailable(r.ok); })
+      .catch(() => { if (!cancelled) setAiAudioAvailable(false); });
+    return () => { cancelled = true; };
+  }, [audioUrl]);
+
+  // If the user had AI-vocal selected and the new movement has no MP3,
+  // fall back to synth so playback doesn't silently stall.
+  useEffect(() => {
+    if (instrument === "ai-vocal" && !aiAudioAvailable) {
+      setInstrument("synth");
+    }
+  }, [aiAudioAvailable]); // intentionally not depending on instrument
+
+  // ─── AI VOCAL PLAYBACK ─────────────────────────────────────────────────────
+  // When the AI-vocal track is selected, drive playback off the <audio> element
+  // instead of the synth. The cursor still advances on its own tempo clock
+  // (visual sync — may drift slightly from the real audio).
+  useEffect(() => {
+    const a = aiAudioRef.current;
+    if (!a) return;
+    if (instrument === "ai-vocal" && audioUrl && aiAudioAvailable) {
+      if (playing) { a.play().catch(() => {}); } else { a.pause(); }
+    } else {
+      // Other instrument selected — make sure audio isn't still playing.
+      try { a.pause(); a.currentTime = 0; } catch {}
+    }
+  }, [playing, instrument, audioUrl, aiAudioAvailable]);
+
+  // When the AI-vocal MP3 finishes, treat that as end-of-section: stop playing
+  // and notify parent (so chain advance still works in audio mode).
+  useEffect(() => {
+    const a = aiAudioRef.current;
+    if (!a) return;
+    const onAudioEnd = () => {
+      if (instrument === "ai-vocal") {
+        setPlaying(false);
+        onEnd?.();
+      }
+    };
+    a.addEventListener("ended", onAudioEnd);
+    return () => a.removeEventListener("ended", onAudioEnd);
+  }, [instrument, onEnd]);
 
   const { STR } = useWork();
   const t = STR[lang].sheetPlayer || FALLBACK_STRINGS[lang];
@@ -156,7 +211,9 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
   // Soundfonts are fetched from MIDI.js / MusyngKite CDN on GitHub Pages.
   // First selection downloads ~1-3MB; subsequent re-uses are instant (cached).
   useEffect(() => {
-    if (instrument === "synth") {
+    if (instrument === "synth" || instrument === "ai-vocal") {
+      // synth runs in-engine; ai-vocal drives playback from a pre-rendered MP3.
+      // Neither needs a Soundfont download.
       instrumentRef.current = null;
       return;
     }
@@ -267,6 +324,8 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
 
   const playCurrentNotes = (durationSec) => {
     if (!audioOn) return;
+    // AI-vocal mode: the MP3 is the audio source — don't double up with synth notes.
+    if (instrument === "ai-vocal") return;
     const osmd = osmdRef.current;
     const ctx = ensureAudio();
     if (!osmd || !ctx) return;
@@ -462,7 +521,9 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
             }}
           >
             {INSTRUMENTS.map(i => (
-              <option key={i.key} value={i.key}>{i.label[lang]}</option>
+              <option key={i.key} value={i.key} disabled={i.requiresAudio && !aiAudioAvailable}>
+                {i.label[lang]}{i.requiresAudio && !aiAudioAvailable ? " — " + t.aiVocalMissing : ""}
+              </option>
             ))}
           </select>
           {instrumentLoading && (
@@ -508,6 +569,9 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
           </div>
         )}
       </div>
+
+      {/* Hidden audio element for AI-vocal MP3 playback */}
+      {audioUrl && <audio ref={aiAudioRef} src={audioUrl} preload="auto" />}
 
       {/* Notation area */}
       <div style={{ position: "relative", minHeight: 240, overflow: "auto", maxHeight: "70vh" }}>
@@ -585,6 +649,7 @@ const FALLBACK_STRINGS = {
     voices: "صداها",
     voicesAll: "همه را روشن کن",
     voicesNone: "همه را خاموش کن",
+    aiVocalMissing: "هنوز اضافه نشده",
   },
   en: {
     play: "Play",
@@ -605,5 +670,6 @@ const FALLBACK_STRINGS = {
     voices: "Voices",
     voicesAll: "All on",
     voicesNone: "All off",
+    aiVocalMissing: "not yet recorded",
   },
 };
