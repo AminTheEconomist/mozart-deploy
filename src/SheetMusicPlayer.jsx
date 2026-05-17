@@ -27,8 +27,9 @@ const INSTRUMENTS = [
 
 export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lang = "fa", color = "#b8893a", autoplay = false, onEnd, onAutoplayStarted, chrome = "full" }) {
   // chrome:
-  //   "full" → all controls (Play, Tempo, Zoom, Instrument, Voices, etc.)
-  //   "none" → just the rendered notation, no controls — for print-style / read-only views
+  //   "full"    → all controls (Play, Tempo, Zoom, Instrument, Voices, etc.)
+  //   "minimal" → just Play + Reset + audio toggle (clean follow-along mode)
+  //   "none"    → no controls — pure print-style notation
   const containerRef = useRef(null);
   const osmdRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -140,6 +141,15 @@ export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lan
           name: inst.Name || inst.NameLabel?.text || inst.nameLabel?.text || inst.Label || inst.Id || `Part ${idx + 1}`,
           enabled: true,
         })));
+        // Apply CSS transition to OSMD's cursor img element so the cursor
+        // GLIDES smoothly between notes instead of jumping (Drumeo/Soundslice-style).
+        // OSMD renders the cursor as an HTMLImageElement appended to the container.
+        try {
+          const cursorImgs = containerRef.current?.querySelectorAll('img');
+          cursorImgs?.forEach(img => {
+            img.style.transition = 'left 0.32s cubic-bezier(.4,0,.2,1), top 0.32s cubic-bezier(.4,0,.2,1)';
+          });
+        } catch {}
         setStatus("ready");
       })
       .catch((err) => {
@@ -450,7 +460,45 @@ export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lan
   return (
     <div className="sm-player-card" style={{ background: "#fafaf7", border: "1px solid #d5d0c4", padding: "1.5rem 1.5rem 1rem" }}>
       {/* Controls (hidden when chrome="none" — for print-style score-only views) */}
-      {chrome !== "none" && (
+      {chrome === "minimal" && (
+        <div style={{
+          display: "flex", gap: ".75rem", alignItems: "center", justifyContent: "center",
+          marginBottom: "1rem", paddingBottom: ".85rem", borderBottom: "1px solid #e5e0d4",
+          direction: lang === "fa" ? "rtl" : "ltr",
+        }}>
+          <button
+            onClick={handlePlayToggle}
+            disabled={status !== "ready"}
+            style={{
+              ...btnStyle(status === "ready", color, playing),
+              padding: ".75rem 1.6rem",
+              fontSize: ".95rem",
+            }}
+          >
+            {playing ? `■ ${t.pause}` : `▶ ${t.play}`}
+          </button>
+          <button
+            onClick={reset}
+            disabled={status !== "ready"}
+            style={btnStyle(status === "ready", "#666", false)}
+          >
+            ⟲ {t.reset}
+          </button>
+          <button
+            onClick={() => setAudioOn(a => !a)}
+            title={audioOn ? t.muteLabel : t.unmuteLabel}
+            style={{
+              ...btnStyle(true, audioOn ? color : "#999", false),
+              padding: ".7rem 1rem",
+              minWidth: 0,
+            }}
+          >
+            {audioOn ? "🔊" : "🔇"}
+          </button>
+        </div>
+      )}
+
+      {chrome === "full" && (
       <div className="sm-player-controls" style={{
         display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap",
         marginBottom: "1.25rem", paddingBottom: "1rem", borderBottom: "1px solid #e5e0d4",

@@ -51,13 +51,15 @@ export function ViewScoreOnly({ lang }) {
       </div>
 
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-        {/* Notation only — no player chrome */}
+        {/* Notation + minimal play button — cursor glides smoothly across notes */}
         <SheetMusicPlayer
           key={selected.latin}
           musicXmlUrl={selected.musicXmlUrl || `/scores/${slug}/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.musicxml`}
+          audioUrl={selected.audioUrl || `/audio/${slug}/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.mp3`}
+          defaultTempo={80}
           lang={lang}
           color={selected.color}
-          chrome="none"
+          chrome="minimal"
         />
 
         {/* Lyrics — Latin / phonetic / translation, stacked per line */}
