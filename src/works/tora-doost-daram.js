@@ -7,7 +7,7 @@
 export const movements = [
   {
     num: "I", latin: "Opening", arc: 65, color: "#7a1f44",
-    key: { fa: "سی♭ مینور · ۸۴=♩ · سوبیتو پیانو", en: "B♭ minor · ♩=84 · Subito P" },
+    key: { fa: "سل مینور · ۸۴=♩ · سوبیتو پیانو", en: "G minor · ♩=84 · Subito P" },
     mood: { fa: "تشنه و نجواگر", en: "Yearning, whispered" },
     author: { fa: "تنظیم کر: تیمور صبا — بر اساس آهنگی از فرهاد مهراد", en: "Choral arr: Teymur Saba — after a song by Farhad Mehrad" },
     sheetUrl: null,
@@ -40,7 +40,7 @@ export const movements = [
   },
   {
     num: "II", latin: "Middle", arc: 45, color: "#b8893a",
-    key: { fa: "سی♭ مینور · مدیوم", en: "B♭ minor · sotto voce → mp → mf" },
+    key: { fa: "سل مینور · مدیوم", en: "G minor · sotto voce → mp → mf" },
     mood: { fa: "عاشقانه، آشکار", en: "Tender, revealing" },
     author: { fa: "تنظیم کر: تیمور صبا", en: "Choral arr: Teymur Saba" },
     sheetUrl: null,
@@ -77,7 +77,7 @@ export const movements = [
   },
   {
     num: "III", latin: "Climax", arc: 90, color: "#c8982a",
-    key: { fa: "سی♭ مینور · مولتو ریتاردندو · فورته‌فورته", en: "B♭ minor · Molto rit. · ff" },
+    key: { fa: "سل مینور · مولتو ریتاردندو · فورته‌فورته", en: "G minor · Molto rit. · ff" },
     mood: { fa: "اعلام، تأکید", en: "Declarative, affirming" },
     author: { fa: "تنظیم کر: تیمور صبا", en: "Choral arr: Teymur Saba" },
     sheetUrl: null,
