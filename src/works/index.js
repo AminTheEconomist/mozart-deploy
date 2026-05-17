@@ -23,9 +23,9 @@ export const WORK_LIST = [
     fa: "سرود روان موتزارت",
     en: "Mozart · Requiem",
     accent: "#b8893a",
-    defaultView: "poetic",
+    defaultView: "sheet",     // user wants scores-first landing for both works
     defaultLang: "fa",
-    defaultSection: "first", // Introit — the entrance to the Mass
+    defaultSection: "first",  // Introit — the entrance to the Mass
   },
   {
     slug: "tora-doost-daram",
