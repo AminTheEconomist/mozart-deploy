@@ -117,6 +117,10 @@ export function SmoothPlaybackEngine({
   const [instrumentLoading, setInstrumentLoading] = useState(false);
   const [parts, setParts] = useState([]);
   const [aiAudioAvailable, setAiAudioAvailable] = useState(false);
+  // Tracks whether the user explicitly changed the instrument. The AI-vocal
+  // auto-default only kicks in until they make a manual choice — after that
+  // we respect it, even when navigating to a new movement that also has an MP3.
+  const userPickedInstrumentRef = useRef(false);
 
   const { STR } = useWork();
   const t = STR[lang].sheetPlayer || FALLBACK_STRINGS[lang];
@@ -139,9 +143,17 @@ export function SmoothPlaybackEngine({
     return () => { cancelled = true; };
   }, [audioUrl]);
 
-  // Fall back to synth if AI-vocal was selected but no MP3 for this movement
+  // AI-vocal is the canonical experience for any movement that has a real
+  // recording — auto-select it when the MP3 probes OK, unless the user has
+  // already picked a specific instrument for this mount. If MP3 is missing
+  // and AI-vocal was selected (e.g. inherited from a previous movement),
+  // fall back to synth so playback doesn't silently stall.
   useEffect(() => {
-    if (instrument === "ai-vocal" && !aiAudioAvailable) setInstrument("synth");
+    if (aiAudioAvailable && !userPickedInstrumentRef.current) {
+      setInstrument("ai-vocal");
+    } else if (instrument === "ai-vocal" && !aiAudioAvailable) {
+      setInstrument("synth");
+    }
   }, [aiAudioAvailable]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── OSMD: load, render, build timeline ─────────────────────────────────
@@ -896,7 +908,10 @@ export function SmoothPlaybackEngine({
             <span style={{ minWidth: 60 }}>{t.instrument}:</span>
             <select
               value={instrument}
-              onChange={(e) => setInstrument(e.target.value)}
+              onChange={(e) => {
+                userPickedInstrumentRef.current = true;
+                setInstrument(e.target.value);
+              }}
               disabled={instrumentLoading}
               style={{
                 fontFamily: lang === "fa" ? "Vazirmatn,Inter,sans-serif" : "Inter,sans-serif",
