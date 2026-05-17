@@ -18,7 +18,23 @@ const VIEWS = {
   performance: ViewPerformance,
 };
 
-const VIEW_ORDER = ["interactive", "poetic", "museum", "cinematic", "minimal", "editorial", "illuminated", "performance", "sheet"];
+// PRIMARY views shown in the side rail / bottom bar. The other 5 view components
+// (poetic, minimal, editorial, illuminated, performance) still exist in VIEWS and
+// can be re-surfaced by adding their key here. Hidden for now to reduce clutter.
+const VIEW_ORDER = ["sheet", "cinematic", "museum", "interactive"];
+
+// Tiny glyph per view so the vertical rail stays readable when narrow.
+const VIEW_ICON = {
+  sheet: "♬",
+  cinematic: "🎬",
+  museum: "🏛",
+  interactive: "✦",
+  poetic: "✎",
+  minimal: "—",
+  editorial: "❡",
+  illuminated: "✧",
+  performance: "🎭",
+};
 
 export default function App() {
   return (
@@ -31,9 +47,9 @@ export default function App() {
 function AppContent() {
   const { slug, setSlug, STR } = useWork();
   // View + language default to the current work's preferences (sheet+fa for Tora,
-  // poetic+fa for Mozart). Computed once at mount.
+  // sheet+fa for Mozart). Computed once at mount.
   const initialWork = WORK_LIST.find(w => w.slug === slug);
-  const [view, setView] = useState(initialWork?.defaultView || "poetic");
+  const [view, setView] = useState(initialWork?.defaultView || "sheet");
   const [lang, setLang] = useState(initialWork?.defaultLang || "fa");
 
   // When the user switches works, jump to that work's defaults automatically.
@@ -65,6 +81,15 @@ function AppContent() {
           .mu-grid { grid-template-columns: 1fr !important; }
           .spine { display: block !important; }
         }
+        /* ─── App chrome: left rail (desktop) → bottom bar (mobile) ──────── */
+        .app-left-rail { display: flex; }
+        .app-bottom-bar { display: none; }
+        @media (max-width: 720px) {
+          .app-left-rail { display: none !important; }
+          .app-bottom-bar { display: flex !important; }
+          .app-content { padding-left: 0 !important; padding-bottom: 4.5rem !important; }
+        }
+
         /* ─── Sheet view — phone layout (sidebar → horizontal pill strip) ─── */
         @media (max-width: 720px) {
           .sm-grid {
@@ -120,9 +145,9 @@ function AppContent() {
         }
       `}</style>
 
-      {/* Top bar: work switcher + view switcher + language toggle */}
-      <div style={{ position: "fixed", top: "1rem", left: "50%", transform: "translateX(-50%)", zIndex: 300, display: "flex", gap: ".5rem", alignItems: "flex-start", flexWrap: "wrap", justifyContent: "center" }}>
-        {/* Work switcher — which musical work is being viewed */}
+      {/* ─── TOP CENTER: work switcher + language toggle (compact) ─── */}
+      <div style={{ position: "fixed", top: "1rem", left: "50%", transform: "translateX(-50%)", zIndex: 300, display: "flex", gap: ".5rem", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+        {/* Work switcher */}
         <div style={{ background: "rgba(15,12,8,.92)", backdropFilter: "blur(16px)", border: `1px solid ${accent}66`, borderRadius: 100, padding: ".3rem", display: "flex", gap: ".2rem", boxShadow: "0 8px 32px rgba(0,0,0,.4)" }}>
           {WORK_LIST.map(w => (
             <button
@@ -148,16 +173,6 @@ function AppContent() {
           ))}
         </div>
 
-        {/* View switcher */}
-        <div style={{ background: "rgba(15,12,8,.92)", backdropFilter: "blur(16px)", border: `1px solid ${accent}66`, borderRadius: 24, padding: ".3rem", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: ".2rem", boxShadow: "0 8px 32px rgba(0,0,0,.4)", maxWidth: "min(80vw, 900px)" }}>
-          {VIEW_ORDER.map(v => (
-            <button key={v} onClick={() => { setView(v); window.scrollTo({ top: 0 }); }}
-              style={{ fontFamily: lang === "fa" ? "Vazirmatn,Tahoma,sans-serif" : "Inter,sans-serif", fontSize: ".7rem", padding: ".45rem .8rem", border: "none", borderRadius: 100, cursor: "pointer", transition: "all .25s", background: view === v ? accent : "transparent", color: view === v ? "#1a1208" : "rgba(245,241,235,.6)", fontWeight: view === v ? 700 : 400, whiteSpace: "nowrap" }}>
-              {labels[v]}
-            </button>
-          ))}
-        </div>
-
         {/* Language toggle */}
         <div style={{ background: "rgba(15,12,8,.92)", backdropFilter: "blur(16px)", border: `1px solid ${accent}66`, borderRadius: 100, padding: ".3rem", display: "flex", gap: ".2rem", boxShadow: "0 8px 32px rgba(0,0,0,.4)" }}>
           {["fa", "en"].map(L => (
@@ -169,8 +184,73 @@ function AppContent() {
         </div>
       </div>
 
-      {/* Key on slug forces the view to remount when work changes, resetting any per-work state (e.g. selected movement in sheet view). */}
-      <ViewComponent key={`${slug}-${view}`} lang={lang} />
+      {/* ─── LEFT VERTICAL RAIL: view switcher (desktop ≥ 721px) ─── */}
+      <div className="app-left-rail" style={{
+        position: "fixed", top: "50%", left: ".75rem", transform: "translateY(-50%)",
+        zIndex: 250,
+        flexDirection: "column", gap: ".35rem",
+        background: "rgba(15,12,8,.92)", backdropFilter: "blur(16px)",
+        border: `1px solid ${accent}66`, borderRadius: 100, padding: ".35rem",
+        boxShadow: "0 8px 32px rgba(0,0,0,.4)",
+      }}>
+        {VIEW_ORDER.map(v => (
+          <button
+            key={v}
+            onClick={() => { setView(v); window.scrollTo({ top: 0 }); }}
+            title={labels[v] || v}
+            style={{
+              width: "2.5rem", height: "2.5rem",
+              border: "none", borderRadius: 100, cursor: "pointer",
+              background: view === v ? accent : "transparent",
+              color: view === v ? "#1a1208" : "rgba(245,241,235,.7)",
+              fontSize: "1.05rem",
+              fontWeight: 600,
+              transition: "all .25s",
+              fontFamily: lang === "fa" ? "Vazirmatn,Tahoma,sans-serif" : "Inter,sans-serif",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}
+          >
+            {VIEW_ICON[v] || "•"}
+          </button>
+        ))}
+      </div>
+
+      {/* ─── BOTTOM HORIZONTAL BAR: view switcher (mobile ≤ 720px) ─── */}
+      <div className="app-bottom-bar" style={{
+        position: "fixed", bottom: ".75rem", left: "50%", transform: "translateX(-50%)",
+        zIndex: 250,
+        gap: ".35rem",
+        background: "rgba(15,12,8,.92)", backdropFilter: "blur(16px)",
+        border: `1px solid ${accent}66`, borderRadius: 100, padding: ".35rem .5rem",
+        boxShadow: "0 8px 32px rgba(0,0,0,.4)",
+      }}>
+        {VIEW_ORDER.map(v => (
+          <button
+            key={v}
+            onClick={() => { setView(v); window.scrollTo({ top: 0 }); }}
+            title={labels[v] || v}
+            style={{
+              display: "flex", flexDirection: "column", alignItems: "center", gap: ".05rem",
+              minWidth: "3.6rem",
+              border: "none", borderRadius: 100, cursor: "pointer",
+              padding: ".4rem .55rem",
+              background: view === v ? accent : "transparent",
+              color: view === v ? "#1a1208" : "rgba(245,241,235,.7)",
+              transition: "all .25s",
+              fontFamily: lang === "fa" ? "Vazirmatn,Tahoma,sans-serif" : "Inter,sans-serif",
+            }}
+          >
+            <span style={{ fontSize: ".95rem" }}>{VIEW_ICON[v] || "•"}</span>
+            <span style={{ fontSize: ".62rem", letterSpacing: ".02em" }}>{labels[v] || v}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Main content — left-padded to clear the rail on desktop, no padding on mobile */}
+      <div className="app-content" style={{ paddingLeft: "4.5rem" }}>
+        {/* Key on slug+view forces the view to remount when either changes, resetting any per-work state. */}
+        <ViewComponent key={`${slug}-${view}`} lang={lang} />
+      </div>
 
       <FeedbackWidget lang={lang} view={view} selected={null} />
       <UpdateBanner lang={lang} />
