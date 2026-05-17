@@ -1,6 +1,7 @@
 // ─── NEW VIEWS: Cinematic · Minimal · Editorial · Illuminated · Sheet Music ──
 import { useState } from "react";
 import { useWork } from "./WorkContext.jsx";
+import { WORK_LIST } from "./works/index.js";
 import { Modal, ArcSVG, SANS, SERIF, LATIN, isFA, dirFor, alignFor } from "./components.jsx";
 import { SheetMusicPlayer } from "./SheetMusicPlayer.jsx";
 
@@ -313,7 +314,13 @@ export function ViewIlluminated({ lang }) {
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewSheetMusic({ lang }) {
   const { movements, themes, STR, slug } = useWork();
-  const [selected, setSelected] = useState(movements[0]);
+  // Land on this work's preferred default section per WORK_LIST.defaultSection:
+  // "first" → Section I, "last" → final section. Mozart opens at the Introit
+  // (entrance to the Mass); Tora opens at the Climax (the "tora doost daram"
+  // affirmation — the user can then listen backward through the build-up).
+  const workMeta = WORK_LIST.find(w => w.slug === slug);
+  const initialIdx = workMeta?.defaultSection === "last" ? movements.length - 1 : 0;
+  const [selected, setSelected] = useState(movements[initialIdx] || movements[0]);
   // chainAutoplay: when true, the player will start the freshly-loaded movement
   // automatically. Set when one movement's playback ends and we advance to the
   // next; cleared by the player itself via onAutoplayStarted.

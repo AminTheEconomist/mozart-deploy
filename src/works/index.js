@@ -25,6 +25,7 @@ export const WORK_LIST = [
     accent: "#b8893a",
     defaultView: "poetic",
     defaultLang: "fa",
+    defaultSection: "first", // Introit — the entrance to the Mass
   },
   {
     slug: "tora-doost-daram",
@@ -33,6 +34,7 @@ export const WORK_LIST = [
     accent: "#7a1f44",
     defaultView: "sheet",
     defaultLang: "fa",
+    defaultSection: "last",  // Climax — the "tora doost daram" affirmation
   },
 ];
 
