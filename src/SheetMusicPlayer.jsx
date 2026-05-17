@@ -46,7 +46,7 @@ export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lan
   const [tempo, setTempo] = useState(defaultTempo);
   const [zoom, setZoom] = useState(1);
   const [audioOn, setAudioOn] = useState(true);
-  const [instrument, setInstrument] = useState("synth");
+  const [instrument, setInstrument] = useState("choir_aahs");
   const [instrumentLoading, setInstrumentLoading] = useState(false);
   // Per-voice enable/disable for rehearsal — e.g. mute soprano to sing along.
   // Auto-populated from the score's parts (Soprano, Alto, Tenor, Bass for SATB).
@@ -125,7 +125,7 @@ export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lan
       drawCredits: false,
       drawPartNames: true,
       drawMeasureNumbers: true,
-      cursorsOptions: [{ type: 0, color: color, alpha: 0.45, follow: true }],
+      cursorsOptions: [{ type: 0, color: color, alpha: 0.7, follow: true }],
     });
     osmdRef.current = osmd;
 
@@ -419,6 +419,17 @@ export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lan
         return;
       }
       const dtMs = currentStepDurationMs();
+      // Make the cursor GLIDE continuously across this step's duration so it
+      // reaches the next note's position just before the audio arrives there.
+      // 92% of dt gives a tiny settle pause before the snap to the next step,
+      // which feels smoother than animating right up to the boundary.
+      try {
+        const cursorImg = containerRef.current?.querySelector('img');
+        if (cursorImg) {
+          const glideMs = Math.max(80, Math.round(dtMs * 0.92));
+          cursorImg.style.transition = `left ${glideMs}ms linear, top ${glideMs}ms linear`;
+        }
+      } catch {}
       stopActiveNotes();
       playCurrentNotes(dtMs / 1000);
       timeoutRef.current = setTimeout(() => {

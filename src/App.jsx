@@ -135,9 +135,10 @@ function AppContent() {
             position: static !important;
             height: auto !important;
             max-height: none !important;
-            /* Top: 6rem clears the fixed top nav (work pill + lang pill stacked
-               on mobile). Without this, the section strip slides under the nav. */
-            padding: 6rem .75rem .85rem !important;
+            /* Top: 9rem clears the fixed top nav which wraps to TWO rows on
+               narrow phones (work-switcher pill is wider than the FA/EN pill,
+               so they stack). Tested at 390px-wide iPhone. */
+            padding: 9rem .75rem .85rem !important;
           }
           .sm-sidebar-header { display: none !important; }
           .sm-sidebar-nav {
