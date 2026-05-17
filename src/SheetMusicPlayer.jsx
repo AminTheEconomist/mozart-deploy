@@ -25,7 +25,10 @@ const INSTRUMENTS = [
   { key: "string_ensemble_1",    label: { fa: "گروه زهی",       en: "Strings" } },
 ];
 
-export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lang = "fa", color = "#b8893a", autoplay = false, onEnd, onAutoplayStarted }) {
+export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lang = "fa", color = "#b8893a", autoplay = false, onEnd, onAutoplayStarted, chrome = "full" }) {
+  // chrome:
+  //   "full" → all controls (Play, Tempo, Zoom, Instrument, Voices, etc.)
+  //   "none" → just the rendered notation, no controls — for print-style / read-only views
   const containerRef = useRef(null);
   const osmdRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -446,7 +449,8 @@ export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lan
   // ─── RENDER ────────────────────────────────────────────────────────────────
   return (
     <div className="sm-player-card" style={{ background: "#fafaf7", border: "1px solid #d5d0c4", padding: "1.5rem 1.5rem 1rem" }}>
-      {/* Controls */}
+      {/* Controls (hidden when chrome="none" — for print-style score-only views) */}
+      {chrome !== "none" && (
       <div className="sm-player-controls" style={{
         display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap",
         marginBottom: "1.25rem", paddingBottom: "1rem", borderBottom: "1px solid #e5e0d4",
@@ -569,6 +573,7 @@ export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lan
           </div>
         )}
       </div>
+      )}
 
       {/* Hidden audio element for AI-vocal MP3 playback */}
       {audioUrl && <audio ref={aiAudioRef} src={audioUrl} preload="auto" />}

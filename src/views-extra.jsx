@@ -7,28 +7,24 @@ import { useState } from "react";
 import { useWork } from "./WorkContext.jsx";
 import { WORK_LIST } from "./works/index.js";
 import { SheetMusicPlayer } from "./SheetMusicPlayer.jsx";
-import { isFA, dirFor, alignFor, SANS, SERIF } from "./components.jsx";
+import { isFA, dirFor, alignFor, SANS, SERIF, LATIN } from "./components.jsx";
 
 // ══════════════════════════════════════════════════════════════════════════════
-// VIEW: Score-only — minimal chrome, just notation + section pills
+// VIEW: Score-only — print-style. Just notation + lyrics. No player controls.
+// User flips between sections with the pill strip; one section at a time, no
+// playback chrome (no Play, no Tempo, no Voices toggle). For sight-reading
+// without the app getting in the way.
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewScoreOnly({ lang }) {
   const { movements, STR, slug } = useWork();
+  const t = STR[lang];
   const workMeta = WORK_LIST.find(w => w.slug === slug);
   const initIdx = workMeta?.defaultSection === "last" ? movements.length - 1 : 0;
   const [selected, setSelected] = useState(movements[initIdx] || movements[0]);
-  const [chainAutoplay, setChainAutoplay] = useState(false);
-
-  const handleSectionEnd = () => {
-    const idx = movements.findIndex(m => m.latin === selected.latin);
-    if (idx >= 0 && idx < movements.length - 1) {
-      setSelected(movements[idx + 1]);
-      setChainAutoplay(true);
-    }
-  };
+  const L = selected[lang];
 
   return (
-    <div style={{ background: "#fafaf8", minHeight: "100vh", padding: "5rem 1.25rem 2rem", direction: dirFor(lang) }}>
+    <div style={{ background: "#fafaf8", minHeight: "100vh", padding: "5rem 1.25rem 3rem", direction: dirFor(lang) }}>
       {/* Section pill strip */}
       <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: "1.5rem", justifyContent: "center" }}>
         {movements.map(m => {
@@ -36,7 +32,7 @@ export function ViewScoreOnly({ lang }) {
           const Lm = m[lang];
           return (
             <button key={m.latin}
-              onClick={() => { setChainAutoplay(false); setSelected(m); }}
+              onClick={() => setSelected(m)}
               style={{
                 padding: ".4rem .85rem",
                 fontSize: ".75rem",
@@ -55,17 +51,31 @@ export function ViewScoreOnly({ lang }) {
       </div>
 
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        {/* Notation only — no player chrome */}
         <SheetMusicPlayer
           key={selected.latin}
           musicXmlUrl={selected.musicXmlUrl || `/scores/${slug}/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.musicxml`}
-          audioUrl={selected.audioUrl || `/audio/${slug}/${selected.num.toLowerCase()}-${selected.latin.toLowerCase().replace(/\s+/g, "-")}.mp3`}
-          defaultTempo={80}
           lang={lang}
           color={selected.color}
-          autoplay={chainAutoplay}
-          onAutoplayStarted={() => setChainAutoplay(false)}
-          onEnd={handleSectionEnd}
+          chrome="none"
         />
+
+        {/* Lyrics — Latin / phonetic / translation, stacked per line */}
+        <div style={{ background: "#fff", padding: "2rem", border: "1px solid #d5d0c4", borderTop: "none", marginTop: 0 }}>
+          {selected.text.map((tx, i) => (
+            <div key={i} style={{
+              marginBottom: i < selected.text.length - 1 ? "1.5rem" : 0,
+              paddingBottom: i < selected.text.length - 1 ? "1.5rem" : 0,
+              borderBottom: i < selected.text.length - 1 ? "1px dotted #d5d0c4" : "none",
+            }}>
+              <p style={{ ...LATIN, fontSize: "1.2rem", color: selected.color, lineHeight: 1.7, marginBottom: ".4rem", textAlign: "left", whiteSpace: "pre-line", fontWeight: 500 }}>{tx.la}</p>
+              {tx.phon && (
+                <p style={{ fontFamily: "'Inter',sans-serif", fontStyle: "italic", fontSize: ".85rem", color: "#666", lineHeight: 1.6, marginBottom: ".55rem", direction: "ltr", textAlign: "left", whiteSpace: "pre-line", letterSpacing: ".03em" }}>{tx.phon}</p>
+              )}
+              <p style={{ ...SERIF(lang), fontSize: "1.05rem", color: "#3a3026", lineHeight: 1.85, whiteSpace: "pre-line" }}>{tx[lang]}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
