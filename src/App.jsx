@@ -4,6 +4,7 @@ import { WORK_LIST, DEFAULT_WORK_SLUG } from "./works/index.js";
 import { ViewInteractive, ViewPoetic, ViewMuseum } from "./views-classic.jsx";
 import { ViewCinematic, ViewMinimal, ViewEditorial, ViewIlluminated, ViewSheetMusic, ViewPerformance } from "./views-new.jsx";
 import { FeedbackWidget } from "./FeedbackWidget.jsx";
+import { UpdateBanner } from "./UpdateBanner.jsx";
 
 const VIEWS = {
   interactive: ViewInteractive,
@@ -118,6 +119,7 @@ function AppContent() {
       <ViewComponent key={`${slug}-${view}`} lang={lang} />
 
       <FeedbackWidget lang={lang} view={view} selected={null} />
+      <UpdateBanner lang={lang} />
     </>
   );
 }
