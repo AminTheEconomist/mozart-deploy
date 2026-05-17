@@ -348,25 +348,25 @@ export function ViewSheetMusic({ lang }) {
 
   return (
     <div style={{ background: "#fafaf8", minHeight: "100vh", color: "#1a1a1a" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "280px 1fr", minHeight: "100vh", direction: dirFor(lang) }}>
+      <div className="sm-grid" style={{ display: "grid", gridTemplateColumns: "280px 1fr", minHeight: "100vh", direction: dirFor(lang) }}>
         {/* Sidebar: movement list */}
-        <aside style={{ background: "#1a1a1a", color: "#fafaf8", padding: "2rem 0", overflowY: "auto", position: "sticky", top: 0, height: "100vh" }}>
-          <div style={{ padding: "0 1.5rem 1.5rem", borderBottom: "1px solid #333" }}>
+        <aside className="sm-sidebar" style={{ background: "#1a1a1a", color: "#fafaf8", padding: "2rem 0", overflowY: "auto", position: "sticky", top: 0, height: "100vh" }}>
+          <div className="sm-sidebar-header" style={{ padding: "0 1.5rem 1.5rem", borderBottom: "1px solid #333" }}>
             <p style={{ ...SANS(lang), fontSize: ".75rem", letterSpacing: ".25em", color: "#b8893a", marginBottom: ".5rem", textTransform: "uppercase" }}>{t.sheetEyebrow}</p>
             <p style={{ ...SERIF(lang), fontSize: "1.15rem", color: "#fafaf8", lineHeight: 1.4 }}>{t.sheetTitle}</p>
           </div>
-          <nav style={{ padding: "1rem 0" }}>
+          <nav className="sm-sidebar-nav" style={{ padding: "1rem 0" }}>
             {movements.map(m => {
               const sel = selected?.latin === m.latin;
               const Lm = m[lang];
               return (
-                <button key={m.latin} onClick={() => handleSelect(m)}
+                <button key={m.latin} className="sm-sidebar-btn" data-sel={sel ? "true" : "false"} onClick={() => handleSelect(m)}
                   style={{ display: "block", width: "100%", textAlign: isFA(lang) ? "right" : "left", padding: ".85rem 1.5rem", background: sel ? "rgba(184,137,58,.15)" : "transparent", border: "none", [isFA(lang) ? "borderRight" : "borderLeft"]: sel ? `3px solid ${m.color}` : "3px solid transparent", cursor: "pointer", transition: "all .2s", color: sel ? "#fafaf8" : "rgba(250,250,248,.65)", direction: dirFor(lang) }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: ".75rem" }}>
+                  <div className="sm-sidebar-btn-row" style={{ display: "flex", alignItems: "baseline", gap: ".75rem" }}>
                     <span style={{ fontFamily: "'Cinzel',serif", fontSize: ".82rem", color: m.color, minWidth: "2rem" }}>{m.num}</span>
                     <div>
-                      <div style={{ ...SERIF(lang), fontSize: "1rem", lineHeight: 1.25 }}>{Lm.title}</div>
-                      <div style={{ fontFamily: "'Cinzel',serif", fontStyle: "italic", fontSize: ".75rem", color: "rgba(250,250,248,.5)", direction: "ltr", textAlign: alignFor(lang) }}>{m.latin}</div>
+                      <div className="sm-sidebar-btn-title" style={{ ...SERIF(lang), fontSize: "1rem", lineHeight: 1.25 }}>{Lm.title}</div>
+                      <div className="sm-sidebar-btn-sub" style={{ fontFamily: "'Cinzel',serif", fontStyle: "italic", fontSize: ".75rem", color: "rgba(250,250,248,.5)", direction: "ltr", textAlign: alignFor(lang) }}>{m.latin}</div>
                     </div>
                   </div>
                 </button>
@@ -376,16 +376,16 @@ export function ViewSheetMusic({ lang }) {
         </aside>
 
         {/* Main: score viewer */}
-        <main style={{ padding: "3rem 3rem 5rem", direction: dirFor(lang) }}>
+        <main className="sm-main" style={{ padding: "3rem 3rem 5rem", direction: dirFor(lang) }}>
           {/* Header */}
-          <div style={{ paddingBottom: "1.5rem", marginBottom: "2rem", borderBottom: "1px solid #d5d0c4" }}>
-            <p style={{ ...SANS(lang), fontSize: ".78rem", letterSpacing: ".25em", color: selected.color, marginBottom: ".4rem", textTransform: "uppercase" }}>{t.movement} · {selected.num} · {selected.key[lang]}</p>
-            <h1 style={{ ...SERIF(lang), fontWeight: 700, fontSize: "clamp(2rem,4vw,3rem)", color: "#1a1a1a", lineHeight: 1.15, marginBottom: ".25rem" }}>{L.title}</h1>
+          <div className="sm-header" style={{ paddingBottom: "1.5rem", marginBottom: "2rem", borderBottom: "1px solid #d5d0c4" }}>
+            <p className="sm-header-sub" style={{ ...SANS(lang), fontSize: ".78rem", letterSpacing: ".25em", color: selected.color, marginBottom: ".4rem", textTransform: "uppercase" }}>{t.movement} · {selected.num} · {selected.key[lang]}</p>
+            <h1 className="sm-header-title" style={{ ...SERIF(lang), fontWeight: 700, fontSize: "clamp(2rem,4vw,3rem)", color: "#1a1a1a", lineHeight: 1.15, marginBottom: ".25rem" }}>{L.title}</h1>
             <p style={{ fontFamily: "'Cinzel',serif", fontStyle: "italic", fontSize: "1.05rem", color: "#888", direction: "ltr", textAlign: alignFor(lang) }}>{selected.latin}</p>
           </div>
 
           {/* Tempo / dynamics strip */}
-          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "2.5rem" }}>
+          <div className="sm-tags" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "2.5rem" }}>
             <span style={{ ...SANS(lang), fontSize: ".82rem", padding: ".5rem 1rem", background: "#1a1a1a", color: "#fafaf8" }}>{selected.mood[lang]}</span>
             <span style={{ ...SANS(lang), fontSize: ".82rem", padding: ".5rem 1rem", background: "#fafaf8", color: "#1a1a1a", border: "1px solid #1a1a1a" }}>{selected.key[lang]}</span>
             <span style={{ ...SANS(lang), fontSize: ".82rem", padding: ".5rem 1rem", background: "#fafaf8", color: "#888", border: "1px solid #d5d0c4" }}>{selected.author[lang]}</span>
@@ -409,18 +409,18 @@ export function ViewSheetMusic({ lang }) {
           </div>
 
           {/* Text reference for sight reading — Latin, Phonetics, Translation stacked per line */}
-          <div style={{ background: "#fff", padding: "2.25rem", border: "1px solid #d5d0c4" }}>
+          <div className="sm-text" style={{ background: "#fff", padding: "2.25rem", border: "1px solid #d5d0c4" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
               <p style={{ ...SANS(lang), fontSize: ".82rem", letterSpacing: ".25em", color: selected.color, textTransform: "uppercase" }}>{t.latinHeader}</p>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: ".72rem", color: "#999", letterSpacing: ".05em", fontStyle: "italic" }}>{t.phonNote}</p>
             </div>
             {selected.text.map((tx, i) => (
               <div key={i} style={{ marginBottom: i < selected.text.length - 1 ? "2rem" : 0, paddingBottom: i < selected.text.length - 1 ? "2rem" : 0, borderBottom: i < selected.text.length - 1 ? "1px dotted #d5d0c4" : "none" }}>
-                <p style={{ ...LATIN, fontSize: "1.4rem", color: selected.color, lineHeight: 1.75, marginBottom: ".5rem", textAlign: "left", whiteSpace: "pre-line", fontWeight: 500 }}>{tx.la}</p>
+                <p className="sm-text-la" style={{ ...LATIN, fontSize: "1.4rem", color: selected.color, lineHeight: 1.75, marginBottom: ".5rem", textAlign: "left", whiteSpace: "pre-line", fontWeight: 500 }}>{tx.la}</p>
                 {tx.phon && (
-                  <p style={{ fontFamily: "'Inter','Helvetica Neue',sans-serif", fontSize: "1rem", color: "#2a4a6a", lineHeight: 1.7, marginBottom: ".75rem", direction: "ltr", textAlign: "left", letterSpacing: ".04em", whiteSpace: "pre-line", fontWeight: 500, background: "#f0f4f8", padding: ".5rem .75rem", borderLeft: `3px solid ${selected.color}` }}>{tx.phon}</p>
+                  <p className="sm-text-phon" style={{ fontFamily: "'Inter','Helvetica Neue',sans-serif", fontSize: "1rem", color: "#2a4a6a", lineHeight: 1.7, marginBottom: ".75rem", direction: "ltr", textAlign: "left", letterSpacing: ".04em", whiteSpace: "pre-line", fontWeight: 500, background: "#f0f4f8", padding: ".5rem .75rem", borderLeft: `3px solid ${selected.color}` }}>{tx.phon}</p>
                 )}
-                <p style={{ ...SERIF(lang), fontStyle: "italic", fontSize: "1.08rem", color: "#666", lineHeight: 1.85, whiteSpace: "pre-line" }}>{tx[lang]}</p>
+                <p className="sm-text-trans" style={{ ...SERIF(lang), fontStyle: "italic", fontSize: "1.08rem", color: "#666", lineHeight: 1.85, whiteSpace: "pre-line" }}>{tx[lang]}</p>
               </div>
             ))}
           </div>

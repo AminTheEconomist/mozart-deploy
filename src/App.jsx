@@ -65,6 +65,59 @@ function AppContent() {
           .mu-grid { grid-template-columns: 1fr !important; }
           .spine { display: block !important; }
         }
+        /* ─── Sheet view — phone layout (sidebar → horizontal pill strip) ─── */
+        @media (max-width: 720px) {
+          .sm-grid {
+            grid-template-columns: 1fr !important;
+            grid-template-rows: auto 1fr !important;
+          }
+          .sm-sidebar {
+            position: static !important;
+            height: auto !important;
+            max-height: none !important;
+            padding: .85rem .75rem !important;
+          }
+          .sm-sidebar-header { display: none !important; }
+          .sm-sidebar-nav {
+            display: flex !important;
+            overflow-x: auto !important;
+            gap: .4rem !important;
+            padding: 0 !important;
+            -webkit-overflow-scrolling: touch;
+          }
+          .sm-sidebar-btn {
+            flex-shrink: 0 !important;
+            width: auto !important;
+            border-radius: 100px !important;
+            padding: .5rem .85rem !important;
+            border: 1px solid rgba(184,137,58,.25) !important;
+            border-left: 1px solid rgba(184,137,58,.25) !important;
+            border-right: 1px solid rgba(184,137,58,.25) !important;
+          }
+          .sm-sidebar-btn-row {
+            gap: .4rem !important;
+            align-items: center !important;
+          }
+          .sm-sidebar-btn-title {
+            font-size: .85rem !important;
+          }
+          .sm-sidebar-btn-sub {
+            display: none !important;
+          }
+          .sm-main { padding: 1.25rem .85rem 3rem !important; }
+          .sm-header { margin-bottom: 1.25rem !important; padding-bottom: 1rem !important; }
+          .sm-header-title { font-size: 1.6rem !important; line-height: 1.15 !important; }
+          .sm-header-sub { font-size: .85rem !important; }
+          .sm-tags { gap: .4rem !important; margin-bottom: 1.5rem !important; }
+          .sm-tags > span { font-size: .72rem !important; padding: .35rem .65rem !important; }
+          .sm-text { padding: 1.1rem !important; }
+          .sm-text-la { font-size: 1.05rem !important; }
+          .sm-text-phon { font-size: .82rem !important; padding: .4rem .55rem !important; }
+          .sm-text-trans { font-size: .92rem !important; }
+          .sm-player-card { padding: 1rem .85rem .85rem !important; }
+          .sm-player-controls { gap: .6rem !important; }
+          .sm-player-controls input[type="range"] { width: 110px !important; }
+        }
       `}</style>
 
       {/* Top bar: work switcher + view switcher + language toggle */}

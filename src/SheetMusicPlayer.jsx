@@ -445,9 +445,9 @@ export function SheetMusicPlayer({ musicXmlUrl, audioUrl, defaultTempo = 80, lan
 
   // ─── RENDER ────────────────────────────────────────────────────────────────
   return (
-    <div style={{ background: "#fafaf7", border: "1px solid #d5d0c4", padding: "1.5rem 1.5rem 1rem" }}>
+    <div className="sm-player-card" style={{ background: "#fafaf7", border: "1px solid #d5d0c4", padding: "1.5rem 1.5rem 1rem" }}>
       {/* Controls */}
-      <div style={{
+      <div className="sm-player-controls" style={{
         display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap",
         marginBottom: "1.25rem", paddingBottom: "1rem", borderBottom: "1px solid #e5e0d4",
         direction: lang === "fa" ? "rtl" : "ltr",
