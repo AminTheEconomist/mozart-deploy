@@ -29,6 +29,7 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
   const activeNotesRef = useRef([]);
   const instrumentRef = useRef(null);          // loaded Soundfont instance
   const instrumentCacheRef = useRef({});       // cache by key so re-selecting is instant
+  const partsRef = useRef([]);                 // mirror of `parts` state, read inside playback closure
 
   const [status, setStatus] = useState("loading"); // loading | ready | error | missing
   const [playing, setPlaying] = useState(false);
@@ -37,6 +38,13 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
   const [audioOn, setAudioOn] = useState(true);
   const [instrument, setInstrument] = useState("synth");
   const [instrumentLoading, setInstrumentLoading] = useState(false);
+  // Per-voice enable/disable for rehearsal — e.g. mute soprano to sing along.
+  // Auto-populated from the score's parts (Soprano, Alto, Tenor, Bass for SATB).
+  const [parts, setParts] = useState([]);
+
+  // Keep ref in sync so the playback loop reads the latest toggle state
+  // without needing to restart on every checkbox flip.
+  useEffect(() => { partsRef.current = parts; }, [parts]);
 
   const { STR } = useWork();
   const t = STR[lang].sheetPlayer || FALLBACK_STRINGS[lang];
@@ -67,6 +75,13 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
         osmd.zoom = zoom;
         osmd.render();
         osmd.cursor.show();
+        // Detect parts (Soprano / Alto / Tenor / Bass etc.) so we can offer
+        // per-voice mute toggles for rehearsal.
+        const instruments = osmd.sheet?.Instruments || osmd.sheet?.instruments || [];
+        setParts(instruments.map((inst, idx) => ({
+          name: inst.Name || inst.NameLabel?.text || inst.nameLabel?.text || inst.Label || inst.Id || `Part ${idx + 1}`,
+          enabled: true,
+        })));
         setStatus("ready");
       })
       .catch((err) => {
@@ -222,6 +237,22 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
     return { oscs, lfo, master };
   };
 
+  // Map a voice entry back to its part index in osmd.sheet.Instruments,
+  // so we can check the corresponding parts[idx].enabled toggle.
+  const getPartIndex = (ve, osmd) => {
+    try {
+      const sse = ve.ParentSourceStaffEntry || ve.parentSourceStaffEntry;
+      const staff = sse?.ParentStaff || sse?.parentStaff;
+      const instrument = staff?.ParentInstrument || staff?.parentInstrument;
+      const instruments = osmd?.sheet?.Instruments || osmd?.sheet?.instruments || [];
+      if (!instrument) return 0;
+      const idx = instruments.indexOf(instrument);
+      return idx >= 0 ? idx : 0;
+    } catch {
+      return 0;
+    }
+  };
+
   const playCurrentNotes = (durationSec) => {
     if (!audioOn) return;
     const osmd = osmdRef.current;
@@ -233,8 +264,11 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
       || [];
 
     const inst = instrument !== "synth" ? instrumentRef.current : null;
+    const partsState = partsRef.current; // read latest toggles without restarting playback
 
     for (const ve of entries) {
+      const partIdx = getPartIndex(ve, osmd);
+      if (partsState[partIdx] && partsState[partIdx].enabled === false) continue;
       const notes = ve.Notes || ve.notes || [];
       for (const note of notes) {
         const midi = noteToMidi(note);
@@ -327,6 +361,15 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
     setPlaying(p => !p);
   };
 
+  // Toggle one voice on/off (e.g. mute Soprano while you sing along).
+  // Reads-write `parts` state; partsRef syncs via useEffect so playback hears it instantly.
+  const togglePart = (idx) => {
+    setParts(prev => prev.map((p, i) => i === idx ? { ...p, enabled: !p.enabled } : p));
+  };
+  const setAllParts = (enabled) => {
+    setParts(prev => prev.map(p => ({ ...p, enabled })));
+  };
+
   // ─── RENDER ────────────────────────────────────────────────────────────────
   return (
     <div style={{ background: "#fafaf7", border: "1px solid #d5d0c4", padding: "1.5rem 1.5rem 1rem" }}>
@@ -412,6 +455,44 @@ export function SheetMusicPlayer({ musicXmlUrl, defaultTempo = 80, lang = "fa", 
             <span style={{ fontSize: ".72rem", color: color, fontStyle: "italic" }}>{t.instrumentLoading}…</span>
           )}
         </div>
+
+        {/* Per-voice toggle — only shown when the score has 2+ parts (e.g. SATB) */}
+        {parts.length > 1 && (
+          <div style={{ display: "flex", alignItems: "center", gap: ".5rem", flexWrap: "wrap", fontFamily: "Inter,sans-serif", fontSize: ".82rem", color: "#444" }}>
+            <span style={{ minWidth: 50 }}>{t.voices}:</span>
+            {parts.map((p, i) => (
+              <label key={i} style={{
+                display: "inline-flex", alignItems: "center", gap: ".3rem",
+                padding: ".3rem .55rem",
+                border: `1px solid ${p.enabled ? color : "#ccc"}`,
+                borderRadius: 4,
+                background: p.enabled ? `${color}11` : "#f5f5f2",
+                color: p.enabled ? "#1a1a1a" : "#999",
+                cursor: "pointer", userSelect: "none", transition: "all .15s",
+                fontFamily: lang === "fa" ? "Vazirmatn,Inter,sans-serif" : "Inter,sans-serif",
+              }}>
+                <input
+                  type="checkbox"
+                  checked={p.enabled}
+                  onChange={() => togglePart(i)}
+                  style={{ accentColor: color, margin: 0 }}
+                />
+                <span style={{ fontSize: ".8rem" }}>{p.name}</span>
+              </label>
+            ))}
+            <button
+              onClick={() => setAllParts(parts.every(p => p.enabled) ? false : true)}
+              title={parts.every(p => p.enabled) ? t.voicesNone : t.voicesAll}
+              style={{
+                background: "transparent", border: "1px solid #ddd", color: "#888",
+                padding: ".3rem .55rem", fontSize: ".72rem", cursor: "pointer", borderRadius: 4,
+                fontFamily: lang === "fa" ? "Vazirmatn,Inter,sans-serif" : "Inter,sans-serif",
+              }}
+            >
+              {parts.every(p => p.enabled) ? t.voicesNone : t.voicesAll}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Notation area */}
@@ -487,6 +568,9 @@ const FALLBACK_STRINGS = {
     missingTitle: "فایل نت تعریف نشده",
     missingBody: "برای این موومان فایل MusicXML تعیین نشده است. فیلد sheetUrl را در content/works/*.json پر کنید.",
     hint: "روی پخش کلیک کنید تا نت‌ها شنیده و مکان‌نما همراه با آن‌ها حرکت کند. تمپو و صدا را با دکمه‌های بالا تنظیم کنید.",
+    voices: "صداها",
+    voicesAll: "همه را روشن کن",
+    voicesNone: "همه را خاموش کن",
   },
   en: {
     play: "Play",
@@ -504,5 +588,8 @@ const FALLBACK_STRINGS = {
     missingTitle: "No score file yet",
     missingBody: "This movement has no MusicXML file assigned. Set the sheetUrl field in content/works/*.json.",
     hint: "Press Play to hear the notes and watch the cursor follow along. Adjust tempo and audio with the buttons above.",
+    voices: "Voices",
+    voicesAll: "All on",
+    voicesNone: "All off",
   },
 };
