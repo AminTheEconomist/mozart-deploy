@@ -312,8 +312,8 @@ export function ViewIlluminated({ lang }) {
 // VIEW: Sheet Music (Sight Reading — scaffold for choir + piano score)
 // ══════════════════════════════════════════════════════════════════════════════
 export function ViewSheetMusic({ lang }) {
-  const [selected, setSelected] = useState(movements[0]);
   const { movements, themes, STR, slug } = useWork();
+  const [selected, setSelected] = useState(movements[0]);
   const t = STR[lang];
   const L = selected[lang];
 
