@@ -38,4 +38,8 @@ export const WORK_LIST = [
   },
 ];
 
-export const DEFAULT_WORK_SLUG = "mozart-requiem";
+// First-time landing work (when no localStorage state exists). Tora opens the
+// site because the choral arrangement is short, scored, and immediately playable —
+// a stronger first impression than Mozart's hero. After the first visit, the
+// user's last choice is remembered via localStorage.
+export const DEFAULT_WORK_SLUG = "tora-doost-daram";

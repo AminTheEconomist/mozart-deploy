@@ -44,20 +44,48 @@ export default function App() {
   );
 }
 
+// localStorage keys — bumped if we ever change the shape so old values get ignored.
+const LS = {
+  view: "mozart-deploy:view:v1",
+  lang: "mozart-deploy:lang:v1",
+  slug: "mozart-deploy:slug:v1",
+};
+function lsRead(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+function lsWrite(key, value) {
+  try { localStorage.setItem(key, value); } catch {}
+}
+
 function AppContent() {
   const { slug, setSlug, STR } = useWork();
-  // View + language default to the current work's preferences (sheet+fa for Tora,
-  // sheet+fa for Mozart). Computed once at mount.
+  // First-visit defaults: Tora Doost Daram + Persian + Sheet view (handled in
+  // WorkProvider for slug, here for view/lang). On subsequent visits, restore
+  // whatever the user last picked via localStorage.
   const initialWork = WORK_LIST.find(w => w.slug === slug);
-  const [view, setView] = useState(initialWork?.defaultView || "sheet");
-  const [lang, setLang] = useState(initialWork?.defaultLang || "fa");
+  const [view, setViewRaw] = useState(() => lsRead(LS.view) || initialWork?.defaultView || "sheet");
+  const [lang, setLangRaw] = useState(() => lsRead(LS.lang) || initialWork?.defaultLang || "fa");
 
-  // When the user switches works, jump to that work's defaults automatically.
+  // Wrap setters to persist immediately.
+  const setView = (v) => { setViewRaw(v); lsWrite(LS.view, v); };
+  const setLang = (l) => { setLangRaw(l); lsWrite(LS.lang, l); };
+  const setSlugPersist = (s) => { setSlug(s); lsWrite(LS.slug, s); };
+
+  // Restore last-picked slug on mount (WorkProvider starts on DEFAULT_WORK_SLUG;
+  // if user has visited before, swap to their last choice).
   useEffect(() => {
-    const w = WORK_LIST.find(w => w.slug === slug);
-    if (w?.defaultView) setView(w.defaultView);
-    if (w?.defaultLang) setLang(w.defaultLang);
-  }, [slug]);
+    const saved = lsRead(LS.slug);
+    if (saved && saved !== slug && WORK_LIST.find(w => w.slug === saved)) {
+      setSlug(saved);
+    }
+    // Run once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // NOTE: We deliberately do NOT auto-apply defaultView/defaultLang on work switch.
+  // User intent (per the May 2026 nav change): switching works should preserve the
+  // current view + language. Defaults apply only on the very first visit, before
+  // localStorage has any saved choices.
 
   const ViewComponent = VIEWS[view];
   const labels = STR[lang].viewLabels;
@@ -152,7 +180,7 @@ function AppContent() {
           {WORK_LIST.map(w => (
             <button
               key={w.slug}
-              onClick={() => { setSlug(w.slug); window.scrollTo({ top: 0 }); }}
+              onClick={() => { setSlugPersist(w.slug); window.scrollTo({ top: 0 }); }}
               title={lang === "fa" ? w.fa : w.en}
               style={{
                 fontFamily: lang === "fa" ? "Vazirmatn,Tahoma,sans-serif" : "Inter,sans-serif",
