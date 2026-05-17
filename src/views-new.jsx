@@ -350,7 +350,7 @@ export function ViewSheetMusic({ lang }) {
     <div style={{ background: "#fafaf8", minHeight: "100vh", color: "#1a1a1a" }}>
       <div className="sm-grid" style={{ display: "grid", gridTemplateColumns: "280px 1fr", minHeight: "100vh", direction: dirFor(lang) }}>
         {/* Sidebar: movement list */}
-        <aside className="sm-sidebar" style={{ background: "#1a1a1a", color: "#fafaf8", padding: "2rem 0", overflowY: "auto", position: "sticky", top: 0, height: "100vh" }}>
+        <aside className="sm-sidebar" style={{ background: "#1a1a1a", color: "#fafaf8", padding: "4.5rem 0 2rem 0", overflowY: "auto", position: "sticky", top: 0, height: "100vh" }}>
           <div className="sm-sidebar-header" style={{ padding: "0 1.5rem 1.5rem", borderBottom: "1px solid #333" }}>
             <p style={{ ...SANS(lang), fontSize: ".75rem", letterSpacing: ".25em", color: "#b8893a", marginBottom: ".5rem", textTransform: "uppercase" }}>{t.sheetEyebrow}</p>
             <p style={{ ...SERIF(lang), fontSize: "1.15rem", color: "#fafaf8", lineHeight: 1.4 }}>{t.sheetTitle}</p>

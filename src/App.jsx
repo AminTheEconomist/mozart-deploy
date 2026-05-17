@@ -135,7 +135,9 @@ function AppContent() {
             position: static !important;
             height: auto !important;
             max-height: none !important;
-            padding: .85rem .75rem !important;
+            /* Top: 6rem clears the fixed top nav (work pill + lang pill stacked
+               on mobile). Without this, the section strip slides under the nav. */
+            padding: 6rem .75rem .85rem !important;
           }
           .sm-sidebar-header { display: none !important; }
           .sm-sidebar-nav {
