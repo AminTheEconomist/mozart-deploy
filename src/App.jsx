@@ -3,33 +3,40 @@ import { WorkProvider, useWork } from "./WorkContext.jsx";
 import { WORK_LIST, DEFAULT_WORK_SLUG } from "./works/index.js";
 import { ViewInteractive, ViewPoetic, ViewMuseum } from "./views-classic.jsx";
 import { ViewCinematic, ViewMinimal, ViewEditorial, ViewIlluminated, ViewSheetMusic, ViewPerformance } from "./views-new.jsx";
+import { ViewScoreOnly, ViewStory, ViewLyrics } from "./views-extra.jsx";
 import { FeedbackWidget } from "./FeedbackWidget.jsx";
 import { UpdateBanner } from "./UpdateBanner.jsx";
 
 const VIEWS = {
-  interactive: ViewInteractive,
-  poetic: ViewPoetic,
-  museum: ViewMuseum,
+  sheet: ViewSheetMusic,
+  scoreonly: ViewScoreOnly,
+  story: ViewStory,
+  lyrics: ViewLyrics,
   cinematic: ViewCinematic,
+  museum: ViewMuseum,
+  interactive: ViewInteractive,
+  // Hidden (still in code, not in the rail): poetic, minimal, editorial, illuminated, performance.
+  poetic: ViewPoetic,
   minimal: ViewMinimal,
   editorial: ViewEditorial,
   illuminated: ViewIlluminated,
-  sheet: ViewSheetMusic,
   performance: ViewPerformance,
 };
 
-// PRIMARY views shown in the side rail / bottom bar. The other 5 view components
-// (poetic, minimal, editorial, illuminated, performance) still exist in VIEWS and
-// can be re-surfaced by adding their key here. Hidden for now to reduce clutter.
-const VIEW_ORDER = ["sheet", "cinematic", "museum", "interactive"];
+// PRIMARY views shown in the side rail / bottom bar. To surface a hidden view,
+// add its key to this array and (if missing) to STR[lang].viewLabels.
+const VIEW_ORDER = ["sheet", "scoreonly", "story", "lyrics", "cinematic", "museum", "interactive"];
 
 // Tiny glyph per view so the vertical rail stays readable when narrow.
 const VIEW_ICON = {
   sheet: "♬",
+  scoreonly: "♩",
+  story: "✎",
+  lyrics: "𝄞",
   cinematic: "🎬",
   museum: "🏛",
   interactive: "✦",
-  poetic: "✎",
+  poetic: "✿",
   minimal: "—",
   editorial: "❡",
   illuminated: "✧",

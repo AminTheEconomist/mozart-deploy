@@ -216,6 +216,7 @@ export const STR = {
       interactive: "تعاملی", poetic: "شعری", museum: "موزه‌ای",
       cinematic: "سینمایی", minimal: "ساده", editorial: "مجله‌ای",
       illuminated: "معنوی", performance: "اجرا", sheet: "نت",
+      scoreonly: "فقط نت", story: "داستان", lyrics: "شعر کامل",
     },
   },
   en: {
@@ -309,6 +310,7 @@ export const STR = {
       interactive: "Interactive", poetic: "Poetic", museum: "Museum",
       cinematic: "Cinematic", minimal: "Minimal", editorial: "Editorial",
       illuminated: "Spiritual", performance: "Performance", sheet: "Score",
+      scoreonly: "Score only", story: "Story", lyrics: "Lyrics",
     },
   },
 };
