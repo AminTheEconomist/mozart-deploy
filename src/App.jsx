@@ -30,16 +30,17 @@ export default function App() {
 
 function AppContent() {
   const { slug, setSlug, STR } = useWork();
-  // View defaults to the current work's preferred landing view (sheet for short scored
-  // pieces, poetic for big liturgical works). Computed once at mount.
-  const initialView = (WORK_LIST.find(w => w.slug === slug)?.defaultView) || "poetic";
-  const [view, setView] = useState(initialView);
-  const [lang, setLang] = useState("fa");
+  // View + language default to the current work's preferences (sheet+fa for Tora,
+  // poetic+fa for Mozart). Computed once at mount.
+  const initialWork = WORK_LIST.find(w => w.slug === slug);
+  const [view, setView] = useState(initialWork?.defaultView || "poetic");
+  const [lang, setLang] = useState(initialWork?.defaultLang || "fa");
 
-  // When the user switches works, jump to that work's defaultView automatically.
+  // When the user switches works, jump to that work's defaults automatically.
   useEffect(() => {
     const w = WORK_LIST.find(w => w.slug === slug);
     if (w?.defaultView) setView(w.defaultView);
+    if (w?.defaultLang) setLang(w.defaultLang);
   }, [slug]);
 
   const ViewComponent = VIEWS[view];
