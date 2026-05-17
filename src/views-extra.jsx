@@ -24,7 +24,7 @@ export function ViewScoreOnly({ lang }) {
   const L = selected[lang];
 
   return (
-    <div style={{ background: "#fafaf8", minHeight: "100vh", padding: "5rem 1.25rem 3rem", direction: dirFor(lang) }}>
+    <div className="extra-top" style={{ background: "#fafaf8", minHeight: "100vh", padding: "5rem 1.25rem 3rem", direction: dirFor(lang) }}>
       {/* Section pill strip */}
       <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: "1.5rem", justifyContent: "center" }}>
         {movements.map(m => {
@@ -91,7 +91,7 @@ export function ViewStory({ lang }) {
   const t = STR[lang];
 
   return (
-    <div style={{ background: "#fdfcf7", minHeight: "100vh", padding: "5rem 1.25rem 4rem", direction: dirFor(lang) }}>
+    <div className="extra-top" style={{ background: "#fdfcf7", minHeight: "100vh", padding: "5rem 1.25rem 4rem", direction: dirFor(lang) }}>
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
         {/* Header */}
         <p style={{ ...SANS(lang), fontSize: ".75rem", letterSpacing: ".25em", color: "#b8893a", marginBottom: ".6rem", textTransform: "uppercase" }}>{t.prologueEyebrow}</p>
@@ -150,7 +150,7 @@ export function ViewLyrics({ lang }) {
   const t = STR[lang];
 
   return (
-    <div style={{ background: "#0d0a06", minHeight: "100vh", color: "#f3ead5", padding: "5rem 1.25rem 4rem", direction: dirFor(lang) }}>
+    <div className="extra-top" style={{ background: "#0d0a06", minHeight: "100vh", color: "#f3ead5", padding: "5rem 1.25rem 4rem", direction: dirFor(lang) }}>
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
         <p style={{ ...SANS(lang), fontSize: ".72rem", letterSpacing: ".3em", color: "#b8893a", marginBottom: ".5rem", textTransform: "uppercase" }}>{t.latinHeader}</p>
         <h1 style={{ ...SERIF(lang), fontSize: "clamp(2rem,5vw,2.5rem)", fontWeight: 700, lineHeight: 1.15, marginBottom: ".4rem", color: "#f3ead5" }}>{t.title1} {t.title2}</h1>

@@ -127,6 +127,9 @@ function AppContent() {
              bottom-bar nav so they don't stack on top of each other. */
           .feedback-fab { bottom: 5.25rem !important; }
           .update-banner { bottom: 5.25rem !important; }
+          /* Same top-nav clearance for views-extra (Story / Lyrics / Score-only)
+             that the Sheet view's sm-sidebar already gets. */
+          .extra-top { padding-top: 9rem !important; }
         }
 
         /* ─── Sheet view — phone layout (sidebar → horizontal pill strip) ─── */
